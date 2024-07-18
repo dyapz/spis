@@ -1,0 +1,142 @@
+body {
+  background: linear-gradient(to right, #9ae4f0, #8cdad6);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* .h1-align {
+  margin-left: -50px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transform: scaleX(1.2);
+  transform-origin: 0 0;
+}
+
+.h1-align span {
+  font-size: 28px;
+  font-weight: lighter;
+} */
+
+
+.card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 700px;
+  border: none;
+}
+
+.card-body-login, .card-body-registration, .card-body-right {
+  width: 50%;
+  padding: 2rem;
+}
+
+.card-body-registration {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.card-body-right {
+  background-color: #20B2AA;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.card-body-right img {
+  max-width: 100%;
+  height: auto;
+}
+
+.btn-custom {
+  background-color: #20B2AA;
+  color: white;
+}
+
+.btn-custom:hover {
+  background-color: #8cdad6;
+  color: white;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8cdad6;
+}
+
+/* Label transition effect */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-control, .form-select {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  background: transparent;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-bottom: 2px solid #20B2AA;
+  box-shadow: none;
+}
+
+.form-label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  font-size: 1rem;
+  color: #aaa;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.form-control:focus + .form-label,
+.form-control:not(:placeholder-shown) + .form-label,
+.form-select:focus + .form-label,
+.form-select.has-value + .form-label {
+  top: -1rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  color: #20B2AA;
+}
+
+.form-select option[value=""][disabled] {
+  display: none;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+/* Add this CSS for the height transition effect */
+.page-transition {
+  height: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: height 0.5s ease-in-out;
+}
+
+.page-transition.visible {
+  height: 100vh; /* Full height of the viewport */
+}
