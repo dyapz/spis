@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="<?php echo base_url().'assets/img/socpen-icon.png'; ?>" />
+  <link rel="icon" href="<?php echo base_url().'assets/img/socpen-icon2.png'; ?>" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,9 +10,12 @@
   <link href="<?php echo base_url().'assets/css/style.css'; ?>" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  <!-- PIE GRAPH -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
   <!-- DATATABLE CSS-->
   <!-- CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap5.min.css">
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.1/b-2.3.2/b-colvis-2.3.2/datatables.min.css"/>   --> <!-- SHOW/HIDE COLUMN -->
 
@@ -26,5 +29,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> <!-- PDF EXPORT -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> <!-- PDF EXPORT -->
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>  
+
+  <!-- DATE PICKER -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
