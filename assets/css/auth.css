@@ -1,5 +1,5 @@
 body {
-  background: linear-gradient(to right, #9ae4f0, #8cdad6);
+  background-color: #e5f2fb;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -41,7 +41,7 @@ body {
 }
 
 .card-body-right {
-  background-color: #20B2AA;
+  background-color: #47a1bd;
   color: white;
   display: flex;
   justify-content: center;
@@ -55,12 +55,12 @@ body {
 }
 
 .btn-custom {
-  background-color: #20B2AA;
+  background-color: #47a1bd;
   color: white;
 }
 
 .btn-custom:hover {
-  background-color: #8cdad6;
+  background-color: #337d94;
   color: white;
 }
 
@@ -74,7 +74,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8cdad6;
+  background: #47a1bd;
 }
 
 /* Label transition effect */
@@ -95,7 +95,7 @@ body {
 }
 
 .form-control:focus, .form-select:focus {
-  border-bottom: 2px solid #20B2AA;
+  border-bottom: 2px solid #47a1bd;
   box-shadow: none;
 }
 
@@ -116,7 +116,7 @@ body {
   top: -1rem;
   left: 0.75rem;
   font-size: 0.75rem;
-  color: #20B2AA;
+  color: #47a1bd;
 }
 
 .form-select option[value=""][disabled] {
