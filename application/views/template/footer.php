@@ -13,12 +13,8 @@
             $(this).children('.nested-menu').stop(true, true).slideUp('fast');
         });
     </script>
-
     <script src="<?php echo base_url().'assets/js/main.js'; ?>" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS Bundle (Optional) -->
     <script src="<?php echo base_url().'assets/js/bootstrap.bundle.min.js'; ?>"></script>
     <script src="<?php echo base_url().'assets/js/fontawesome.js'; ?>"></script>
-    <!-- GOOLE REPATCHA JS-->
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 </body>
 </html>

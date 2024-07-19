@@ -1,49 +1,53 @@
-<div class="container-fluid">
-    <div class="card mt-3 shadow">
+<div class="container-fluid ">
+
+    <div class="card mt-3">
         <div class="card-body">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-4">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-md-4 me-3">
                         <div id="bfrtip-btn"></div>
                     </div>
                 </div>
         </div>
     </div>
 
-    <div class="card card-shadow mt-4">
+    <div class="card mt-4">
         <div class="card-header">
             Client List
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover" id="spis_table" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 2%;"><input type="checkbox" id="selectAll"></th>
-                        <th class="text-center">Client Name</th>
-                        <th class="text-center">Birthdate</th>
-                        <th class="text-center">Age</th>
-                        <th class="text-center">Brgy</th>
-                        <th class="text-center">Municipality</th>
-                        <th class="text-center">Province</th>
-                        <th class="text-center">Region</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center"></th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th class="text-center"></th>
-                        <th class="text-center">Client Name</th>
-                        <th class="text-center">Birthdate</th>
-                        <th class="text-center">Age</th>
-                        <th class="text-center">Brgy</th>
-                        <th class="text-center">Municipality</th>
-                        <th class="text-center">Province</th>
-                        <th class="text-center">Region</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center"></th>
-                    </tr>
-                </tfoot>
-            </table>
+
+                <table class="table table-bordered table-hover" id="spis_table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="text-center">1</th>
+                            <th class="text-center">2</th>
+                            <th class="text-center">3</th>
+                            <th class="text-center">4</th>
+                            <th class="text-center">5</th>
+                            <th class="text-center">6</th>
+                            <th class="text-center">7</th>
+                            <th class="text-center">8</th>
+                            <th class="text-center">9</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>a</td>
+                            <td>b</td>                        
+                            <td>c</td>
+                            <td>d</td>
+                            <td>e</td>
+                            <td>f</td>
+                            <td>g</td>
+                            <td>h</td>
+                            <td>i</td>
+                            <td><i class="fa-solid fa-print text-primary"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
         </div>
     </div>
 </div>
@@ -61,7 +65,14 @@
             orderCellsTop: true,
             fixedHeader: true,
             dom: 'lBfrtip',
-            buttons: ['copy', 'csv', 'excel'],
+            buttons: ['copy', 'csv', 'excel', 'pdf'],
+            // ajax: {
+            // url: "#",
+            // type: "POST",
+            // data: function (data) {
+            //     data.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>";
+            //     },
+            // },
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 
             initComplete: function () {

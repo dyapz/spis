@@ -1,17 +1,37 @@
-document.addEventListener('DOMContentLoaded', function() {
-  var selects = document.querySelectorAll('.form-select');
-  selects.forEach(function(select) {
-    select.addEventListener('change', function() {
-      if (select.value) {
-        select.classList.add('has-value');
-      } else {
-        select.classList.remove('has-value');
-      }
-    });
-  });
-});
 
 
+// View password toggle
+function togglePassword() {
+  const password = document.getElementById('password');
+  const icon = document.getElementById('togglePasswordIcon');
+  if (password.type === 'password') {
+      password.type = 'text';
+      icon.classList.remove('bi-eye');
+      icon.classList.add('bi-eye-slash');
+  } else {
+      password.type = 'password';
+      icon.classList.remove('bi-eye-slash');
+      icon.classList.add('bi-eye');
+  }
+}
+
+function toggleCPassword() {
+  const password = document.getElementById('cpassword');
+  const icon = document.getElementById('toggleCPasswordIcon');
+  if (password.type === 'password') {
+      password.type = 'text';
+      icon.classList.remove('bi-eye');
+      icon.classList.add('bi-eye-slash');
+  } else {
+      password.type = 'password';
+      icon.classList.remove('bi-eye-slash');
+      icon.classList.add('bi-eye');
+  }
+}
+
+// Attach toggle password functions
+document.getElementById('togglePasswordIcon')?.addEventListener('click', togglePassword);
+document.getElementById('toggleCPasswordIcon')?.addEventListener('click', toggleCPassword);
 
 // Page transition
 const mainContent = document.getElementById("main-content");
@@ -43,19 +63,4 @@ window.addEventListener('load', () => {
 
 
 
-// View Password
-$(document).on('click', '.toggle-password', function() {
 
-  $(this).toggleClass("fa-eye fa-eye-slash");
-
-  var input = $("#password");
-  input.attr('type') === 'password' ? input.attr('type','text') : input.attr('type','password')
-});
-
-$(document).on('click', '.toggle-cpassword', function() {
-
-  $(this).toggleClass("fa-eye fa-eye-slash");
-
-  var input = $("#cpassword");
-  input.attr('type') === 'password' ? input.attr('type','text') : input.attr('type','password')
-});

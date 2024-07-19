@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="<?php echo base_url().'assets/img/socpen-icon2.png'; ?>" />
+  <link rel="icon" href="<?php echo base_url().'assets/img/socpen-icon.png'; ?>" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?php echo base_url().'assets/css/auth.css'; ?>" rel="stylesheet">
-    <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
 <div id="main-content" class="page-transition">
@@ -16,13 +16,14 @@
       <h4 class="card-title mb-4">Login</h4>
       <form action="" method="POST" autocomplete="off">
         <div class="form-group">
-          <input type="text" name="username" class="form-control" id="username" placeholder="" required>
+          <input type="text" name="" class="form-control" id="username" placeholder="" required>
           <label for="username" class="form-label">Username</label>
         </div>
         <div class="form-group position-relative">
-          <input type="password" name="password" class="form-control" id="password" placeholder="" required>
+          <input type="password" name="" class="form-control" id="password" placeholder="" required>
           <label for="password" class="form-label">Password</label>
-          <span class="position-absolute top-50 end-0 translate-middle-y me-3 fa fa-fw fa-eye field_icon toggle-password">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3" onclick="togglePassword()">
+            <i class="bi bi-eye" id="togglePasswordIcon"></i>
           </span>
         </div>
         <p class="mb-4"><a href="#" data-bs-toggle="modal" data-bs-target="#forgotPassword">forgot password</a></p>
@@ -32,10 +33,10 @@
         <button type="submit" class="btn btn-custom w-100">Login</button>
       </form>
       <p class="mt-2">Don't have an account?  <a id="register-link" href="#" data-url-register="<?php echo base_url().'auth/register'; ?>">Register</a></p>
-
     </div>
     <div class="card-body-right">
-        <img src="<?php echo base_url().'assets/img/socpen-logo2.png'; ?>" alt="SOCIAL PENSION INFORMATION SYSTEM" >
+        <img src="<?php echo base_url().'assets/img/02 SocPen Logo (no background).png'; ?>" alt="SOCIAL PENSION INFORMATION SYSTEM" >
+
     </div>
   </div>
 </div>
@@ -67,11 +68,9 @@
     </div>
   </div>
 
-
-<script src="https://kit.fontawesome.com/092843e6dd.js" crossorigin="anonymous"></script>
-<script src="<?php echo base_url().'assets/js/auth.js'; ?>"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src='https://www.google.com/recaptcha/api.js'></script>
+  <script src="<?php echo base_url().'assets/js/auth.js'; ?>"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>
 </html>

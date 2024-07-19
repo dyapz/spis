@@ -1,5 +1,6 @@
+/* style.css */
 body {
-  background-color: #e5f2fb;
+  background: linear-gradient(to right, #9ae4f0, #8cdad6);
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -7,16 +8,16 @@ body {
 
 .text-color-custom{
 
-  color: #47a1bd;
+  color: #20B2AA;
 }
 
 .btn-custom {
-  background-color: #47a1bd;
+  background-color: #20B2AA;
   color: white;
 }
 
 .btn-custom:hover {
-  background-color: #337d94;
+  background-color: #8cdad6;
   color: white;
 }
 
@@ -38,7 +39,7 @@ body {
 }
 
 .form-control:focus, .form-select:focus {
-  border-bottom: 2px solid #47a1bd;
+  border-bottom: 2px solid #20B2AA;
   box-shadow: none;
 }
 
@@ -59,88 +60,21 @@ body {
   top: -1rem;
   left: 0.75rem;
   font-size: 0.75rem;
-  color: #47a1bd;
+  color: #20B2AA;
 }
 
 .form-select option[value=""][disabled] {
   display: none;
 }
 
-
-/* card custom */
-.card-shadow{
-  box-shadow:0 12px 15px 0 rgba(0,0,0,.30),0 17px 50px 0 rgba(0,0,0,.25);
-}
+    .card{
+      box-shadow:0 12px 15px 0 rgba(0,0,0,.30),0 17px 50px 0 rgba(0,0,0,.25);
+    }
 
 .card-header{
   background: #9ea5e6;
-    background: linear-gradient(0deg, #47a1bd  0%, #337d94  100%);
+    background: linear-gradient(0deg, #50b4d3  0%, #2a656d  100%);
     color: #fff;
   font-weight: bold;
 
 }
-
-.border-left-primary{
-  border-left:.25rem solid #4e73df!important
-}
-
-.border-left-danger{
-  border-left:.25rem solid #e74a3b!important
-}
-
-.border-left-info{
-  border-left:.25rem solid #36b9cc!important
-}
-
-.border-left-success{
-  border-left:.25rem solid #1cc88a!important
-}
-
-.text-gray-300{
-  color:#dddfeb!important
-}
-
-.text-xs{
-  font-size:.7rem
-}
-
-
-/* navigation bar custom */
-.navbar {
-  background-color: #47a1bd;
-  color: #fff; 
-}
-
-.navbar-nav .nav-link {
-  color: #fff !important; 
-}
-
-.navbar-brand {
-  color: #fff !important; 
-}
-
-
-.navbar-nav .nav-link:hover {
-  color: #f8f9fa !important;
-}
-
-.navbar-toggler {
-  color: #fff; 
-}
-
-
-/* fix table for column filter */
-.datatableFilters th {
-  height: 0;
-  padding: 0;
-  border: 1px solid lightgray;
-  color:  lightgray;
-}
-
-.datatableFilters input {
-    width: 100%;
-    padding: 2px;
-    border: 0;
-}
-
-  
