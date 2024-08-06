@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="card mt-3 shadow">
         <div class="card-body">
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-end" style="margin-right: -600px">
                     <div class="col-md-4">
                         <div id="bfrtip-btn"></div>
                     </div>
@@ -14,7 +14,7 @@
             Client List
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover" id="spis_table" style="width: 100%;">
+            <table class="table table-bordered table-hover table-responsive" id="spis_table" style="width: 100%;">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 2%;"><input type="checkbox" id="selectAll"></th>
@@ -57,6 +57,7 @@
             .appendTo('#spis_table thead');
 
         var table = $('#spis_table').DataTable({
+			responsive: true,
             order: [[5, 'asc']],
             orderCellsTop: true,
             fixedHeader: true,

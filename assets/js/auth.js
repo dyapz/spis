@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   var selects = document.querySelectorAll('.form-select');
+  
   selects.forEach(function(select) {
+    // Check if select already has a value and add 'has-value' class
+    if (select.value) {
+      select.classList.add('has-value');
+    }
+
     select.addEventListener('change', function() {
       if (select.value) {
         select.classList.add('has-value');

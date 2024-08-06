@@ -1,4 +1,3 @@
-
 <div class="container">
     <div class="row">
         <!-- Active Client Card -->
@@ -58,11 +57,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs fw-bold text-success mb-1">POTENCIAL BENEFICIARIES</div>
+                            <div class="text-xs fw-bold text-success mb-1">DELISTED</div>
                             <div class="h6 mb-0 fw-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-user-pen fa-2x text-gray-300"></i>
+                            <i class="fas fa-user-xmark fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>

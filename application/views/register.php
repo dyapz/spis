@@ -1,3 +1,12 @@
+<?php 
+	$csrf = array(
+		'name' => $this->security->get_csrf_token_name(),
+		'hash' => $this->security->get_csrf_hash()
+  );
+
+	error_reporting(0);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,60 +21,82 @@
 <body>
 
 <div id="main-content" class="page-transition">
-  <div class="card shadow">
+  <div class="card card-shadow">
     <div class="card-body-registration">
       <h4 class="card-title mb-4">Register</h4>
       <form action="" method="POST" autocomplete="off">
         <div class="form-group">
-          <input type="text" name="fname" class="form-control" id="fname" placeholder="" required>
-          <label for="fname" class="form-label">First Name</label>
-        </div>
-        <div class="form-group">
-          <input type="text" name="mname" class="form-control" id="mname" placeholder="">
-          <label for="mname" class="form-label">Middle Name</label>
-        </div>
-        <div class="form-group">
-          <input type="text" name="lname" class="form-control" id="lname" placeholder="" required>
-          <label for="lname" class="form-label">Last Name</label>
-        </div>
-        <div class="form-group">
-          <input type="text" name="extname" class="form-control" id="extname" placeholder="">
-          <label for="extname" class="form-label">Ext Name</label>
-        </div>
-        <div class="form-group">
-          <input type="text" name="idnumber" class="form-control" id="idnumber" placeholder="" required>
-          <label for="idnumber" class="form-label">ID Number</label>
-        </div>
-        <div class="form-group">
-          <input type="email" name="email" class="form-control" id="email" placeholder="" required>
-          <label for="email" class="form-label">Email Address</label>
-        </div>
-        <div class="form-group">
-          <select name="" class="form-select" id="region_id" required>
+          <select name="region_id" class="form-select <?php echo set_value('region_id') ? 'has-value' : ''; ?>" id="region_id" required>
             <option value="" disabled selected></option>
-            <option value="1">NCR</option>
-            <option value="2">CAR</option>
+              <?php foreach($region as $row){ ?>
+                <option value="<?php echo $row->region_id; ?>" <?php echo set_select('region_id', $row->region_id); ?>><?php echo $row->region_name; ?></option>
+              <?php } ?>
           </select>
-          <label for="region_id" class="form-label">Region</label>
+          <label for="region_id" class="form-label">DSWD Field Office</label>
         </div>
         <div class="form-group">
-          <input type="text" name="username" class="form-control" id="username" placeholder="" required>
+          <input type="text" name="user_fname" class="form-control" id="user_fname" value="<?php echo !empty($user['user_fname'])?$user['user_fname']:''; ?>" placeholder="" required>
+          <label for="user_fname" class="form-label">First Name</label>
+          <?php echo form_error('user_fname','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+          <input type="text" name="user_mname" class="form-control" id="user_mname" value="<?php echo !empty($user['user_mname'])?$user['user_mname']:''; ?>" placeholder="">
+          <label for="user_mname" class="form-label">Middle Name</label>
+          <?php echo form_error('user_mname','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+          <input type="text" name="user_lname" class="form-control" id="user_lname" value="<?php echo !empty($user['user_lname'])?$user['user_lname']:''; ?>" placeholder="" required>
+          <label for="user_lname" class="form-label">Last Name</label>
+          <?php echo form_error('user_lname','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+          <input type="text" name="user_ename" class="form-control" id="user_ename" value="<?php echo !empty($user['user_ename'])?$user['user_ename']:''; ?>" placeholder="">
+          <label for="user_ename" class="form-label">Ext. (III, Jr.)</label>
+          <?php echo form_error('user_ename','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+            <select name="user_gender" class="form-select <?php echo set_value('user_gender') ? 'has-value' : ''; ?>" id="user_gender" required>
+                <option value="" disabled <?php echo empty($user['user_gender']) ? 'selected' : ''; ?>></option>
+                <option value="1" <?php echo set_select('region_id', '1'); ?>>Male</option>
+                <option value="2" <?php echo set_select('region_id', '2'); ?>>Female</option>
+                <option value="3" <?php echo set_select('region_id', '3'); ?>>Member of LGBTTQQIA+++</option>
+            </select>
+            <label for="user_gender" class="form-label">Gender</label>
+        </div>
+
+        <div class="form-group">
+          <input type="email" name="user_email" class="form-control" id="user_email" value="<?php echo !empty($user['user_email'])?$user['user_email']:''; ?>" placeholder="" required>
+          <label for="user_email" class="form-label">Email Address</label>
+          <?php echo form_error('user_email','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+          <input type="text" name="user_designation" class="form-control" id="user_designation" value="<?php echo !empty($user['user_designation'])?$user['user_designation']:''; ?>" placeholder="" required>
+          <label for="user_designation" class="form-label">Designation</label>
+          <?php echo form_error('user_designation','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+          <input type="text" name="username" class="form-control" id="username" value="<?php echo !empty($user['username'])?$user['username']:''; ?>" placeholder="" required>
           <label for="username" class="form-label">Username</label>
+          <?php echo form_error('username','<p class="help-block text-danger">','</p>'); ?>
         </div>
         <div class="form-group">
           <input type="password" name="password" class="form-control" id="password" placeholder="" required>
           <label for="password" class="form-label">Password</label>
-          <span class="position-absolute top-50 end-0 translate-middle-y me-3 fa fa-fw fa-eye field_icon toggle-password">
+          <span class="position-absolute end-0 translate-middle-y me-3 fa fa-fw fa-eye field_icon toggle-password" style="top: 20px"></span>
+          <?php echo form_error('password','<p class="help-block text-danger">','</p>'); ?>
         </div>
         <div class="form-group">
           <input type="password" name="cpassword" class="form-control" id="cpassword" placeholder="" required>
-          <label for="cpassword" class="form-label">Password</label>
-          <span class="position-absolute top-50 end-0 translate-middle-y me-3 fa fa-fw fa-eye field_icon toggle-cpassword">
+          <label for="cpassword" class="form-label">Confirm Password</label>
+          <span class="position-absolute end-0 translate-middle-y me-3 fa fa-fw fa-eye field_icon toggle-cpassword" style="top: 20px"></span>
+          <?php echo form_error('cpassword','<p class="help-block text-danger">','</p>'); ?>
         </div>
         <div class="mb-3">
           <div class="g-recaptcha" name="gcaptcha" data-sitekey="<?php echo $this->config->item('google_key') ?>"></div> 
+          <div class="text-danger text-center"><?=$this->session->flashdata('gcaptcha_error')?></div>
         </div>
-        <button type="submit" class="btn btn-custom w-100">Register</button>
+				<input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
+        <input type="submit" name="registerSubmit" value="Register" class="btn btn-custom w-100">
       </form>
       <p class="mt-2">Already have an account?<a id="login-link" href="#" data-url-login="<?php echo base_url().'auth'; ?>">Login</a></p>
     </div>
@@ -75,20 +106,6 @@
   </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-  var selects = document.querySelectorAll('.form-select');
-  selects.forEach(function(select) {
-    select.addEventListener('change', function() {
-      if (select.value) {
-        select.classList.add('has-value');
-      } else {
-        select.classList.remove('has-value');
-      }
-    });
-  });
-});
-</script>
 <script src="https://kit.fontawesome.com/092843e6dd.js" crossorigin="anonymous"></script>
   <script src="<?php echo base_url().'assets/js/auth.js'; ?>"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

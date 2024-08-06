@@ -10,10 +10,11 @@
           <a class="nav-link" href="<?php echo base_url().'main'; ?>"><i class="fa-solid fa-house fa-sm"></i> Home</a></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url().'main/client_list'; ?>"><i class="fa-solid fa-person-cane fa-sm"></i> Client List</a></a>
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addNew"><i class="fa-solid fa-plus fa-sm"></i> New</a>
+          <!-- <a class="nav-link" href="#"><i class="fa-solid fa-plus fa-sm"></i> New</a> -->
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addNew"><i class="fa-solid fa-plus fa-sm"></i> New</a>
+          <a class="nav-link" href="<?php echo base_url().'main/client_list'; ?>"><i class="fa-solid fa-person-cane fa-sm"></i> Client List</a></a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -30,13 +31,13 @@
         <ul class="navbar-nav">
           <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Fullname
+              <?php echo $this->session->user_fname.' '.substr($this->session->user_mname, 0, 1).' '.$this->session->user_lname; ?> 
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
               <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear fa-sm fa-fw"></i> Profile</a></li>
               <li><a class="dropdown-item" href="#"><i class="fa-solid fa-key fa-sm fa-fw"></i> Change Password</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw"></i> Logout</a></li>
+              <li><a class="dropdown-item text-danger" href="<?php echo base_url().'auth/logout'; ?>"><i class="fas fa-sign-out-alt fa-sm fa-fw"></i> Logout</a></li>
             </ul>
           </li>
         </ul>

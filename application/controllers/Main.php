@@ -21,17 +21,28 @@ class Main extends CI_Controller {
 
 
 	public function index()	{
-		$this->load->view('template/header');
-		$this->load->view('template/nav');
-		$this->load->view('index');
-		$this->load->view('template/footer');
+		if(!$this->session->userdata('user_type')){ 
+            $this->session->set_flashdata("error", "Sorry you don't have permission to access the page you were trying to reach!");
+			redirect('auth');
+		}else{
+
+			$this->load->view('template/header');
+			$this->load->view('template/nav');
+			$this->load->view('index');
+			$this->load->view('template/footer');
+		}
 	}
 
 	public function client_list()	{
+		if(!$this->session->userdata('user_type')){ 
+            $this->session->set_flashdata("error", "Sorry you don't have permission to access the page you were trying to reach!");
+			redirect('auth');
+		}else{
 		$this->load->view('template/header');
 		$this->load->view('template/nav');
 		$this->load->view('client_list');
 		$this->load->view('template/footer');
+		}
 	}
 
 }

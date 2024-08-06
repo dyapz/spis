@@ -1,3 +1,12 @@
+<?php 
+	$csrf = array(
+		'name' => $this->security->get_csrf_token_name(),
+		'hash' => $this->security->get_csrf_hash()
+  );
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +19,24 @@
     <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
 </head>
 <body>
+
+
+
 <div id="main-content" class="page-transition">
+ 
   <div class="card shadow">
     <div class="card-body-login">
+      <div class="mb-2">
+        <!-- Flashdata Success-->
+        <p class="text-success"><?php echo $this->session->flashdata('success');?></p>
+        <!-- Flashdata Error-->
+        <p class="text-danger"><?php echo $this->session->flashdata('error');?></p>
+        <div class="text-danger text-center"><?=$this->session->flashdata('gcaptcha_error')?></div>
+      </div>
+
+
       <h4 class="card-title mb-4">Login</h4>
-      <form action="" method="POST" autocomplete="off">
+      <form action="<?php echo base_url(); ?>auth/authenticate" method="POST" autocomplete="off">
         <div class="form-group">
           <input type="text" name="username" class="form-control" id="username" placeholder="" required>
           <label for="username" class="form-label">Username</label>
@@ -29,6 +51,7 @@
         <div class="mb-3">
           <div class="g-recaptcha" name="gcaptcha" data-sitekey="<?php echo $this->config->item('google_key') ?>"></div>
         </div>
+				<input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
         <button type="submit" class="btn btn-custom w-100">Login</button>
       </form>
       <p class="mt-2">Don't have an account?  <a id="register-link" href="#" data-url-register="<?php echo base_url().'auth/register'; ?>">Register</a></p>
@@ -49,18 +72,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-        <form action="" method="POST" autocomplete="off">
-            <div class="form-group">
-                <input type="email" name="" class="form-control" id="email" placeholder=" ">
-                <label for="email" class="form-label">Email Address</label>
-            </div>
-            <div class="mb-3">
-              <div class="g-recaptcha" name="gcaptcha" data-sitekey="<?php echo $this->config->item('google_key') ?>"></div>
-            </div>
-          </div>
-          <div class="modal-footer">
+          <form action="<?php echo base_url().'auth/forgotpassword';?>" method="POST" autocomplete="off">
+              <div class="form-group">
+                  <input type="email" name="user_email" class="form-control" id="user_email" placeholder=" ">
+                  <label for="user_email" class="form-label">Email Address</label>
+              </div>
+              <div class="mb-3">
+                <div class="g-recaptcha" name="gcaptcha" data-sitekey="<?php echo $this->config->item('google_key') ?>"></div>
+              </div>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
             <button type="submit" class="btn btn-custom">Reset</button>
-        </form>
+          </form>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
