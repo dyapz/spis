@@ -20,7 +20,7 @@ class Main extends CI_Controller {
 	 */
 
 
-	public function index()	{
+	public function index(){
 		if(!$this->session->userdata('user_type')){ 
             $this->session->set_flashdata("error", "Sorry you don't have permission to access the page you were trying to reach!");
 			redirect('auth');
@@ -33,7 +33,7 @@ class Main extends CI_Controller {
 		}
 	}
 
-	public function client_list()	{
+	public function client_list(){
 		if(!$this->session->userdata('user_type')){ 
             $this->session->set_flashdata("error", "Sorry you don't have permission to access the page you were trying to reach!");
 			redirect('auth');
@@ -44,5 +44,13 @@ class Main extends CI_Controller {
 		$this->load->view('template/footer');
 		}
 	}
+
+
+	public function newuser(){
+		$this->load->view('newuser');
+
+	}
+
+	
 
 }
