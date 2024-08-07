@@ -146,7 +146,7 @@ class Auth extends CI_Controller {
 			$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only'); 
 			$this->form_validation->set_rules('user_ename', 'Suffix Name', 'callback_text_only'); 
 			$this->form_validation->set_rules('user_gender', 'Sex', 'required'); 
-			$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|valid_email'); 
+			$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|callback_checkEmailDomain|valid_email'); 
 			$this->form_validation->set_rules('user_designation', 'Designation', 'required|callback_text_only'); 
 			$this->form_validation->set_rules('username', 'Username', 'required|callback_checkUsername|callback_textnumber_only'); 
 			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[25]|callback_password_strong'); 
@@ -248,6 +248,17 @@ class Auth extends CI_Controller {
 				return FALSE;
 			} else {
 				return TRUE;
+			}
+		}
+
+		// EXISTING EMAIL DOMAIN
+		public function checkEmailDomain($email) {
+			$domain = substr(strrchr($email, "@"), 1);
+			if($domain == 'dswd.gov.ph') {
+				return TRUE;
+			} else {
+				$this->form_validation->set_message('checkEmailDomain', 'The Email field must be a valid @dswd.gov.ph address.');
+				return FALSE;
 			}
 		}
 
@@ -400,19 +411,18 @@ class Auth extends CI_Controller {
 		}
 	}
 
-	// public function resend_otp() {
-	// 	$user_id = strip_tags($this->input->post('user_id'));
-	// 	$verify_user_id = $this->Authmodel->otp_verify_model($user_id);  
+	public function resend_otp() {
+		$user_id = strip_tags($this->input->post('user_id'));
+		$verify_user_id = $this->Authmodel->otp_verify_model($user_id);  
 
-	// 	if($verify_user_id){
+		if($verify_user_id){
 
-	// 		$email
+			$user_email = $verify_user_id['user_email'];
 
+			$this->Authmodel->resend_otp_model($user_email);  
 
-	// 		$verify_user_id = $this->Authmodel->resend_otp_model($user_id);  
+		}
 
-	// 	}
-
-	// }
+	}
 
 }

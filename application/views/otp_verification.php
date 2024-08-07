@@ -21,7 +21,7 @@ foreach($otp_verification as $row) {
   <link rel="icon" href="<?php echo base_url().'assets/img/socpen-icon2.png'; ?>" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>OTP Verification</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?php echo base_url().'assets/css/auth.css'; ?>" rel="stylesheet">
   <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
@@ -67,8 +67,9 @@ foreach($otp_verification as $row) {
 
 <script>
   $(document).ready(function() {
-    var userTimestamp = new Date("<?php echo $user_timestamp; ?>").getTime(); // Convert PHP timestamp to JavaScript timestamp in milliseconds
-    var countdownTime = userTimestamp + (3 * 60 * 1000); // Add 3 minutes in milliseconds
+    // 3 MINUTES COUNTDOWN FOR RESEND OTP
+    var userTimestamp = new Date("<?php echo $user_timestamp; ?>").getTime(); 
+    var countdownTime = userTimestamp + (5 * 60 * 1000); 
 
     function updateCountdown() {
       var now = new Date().getTime();
@@ -86,6 +87,11 @@ foreach($otp_verification as $row) {
     }
 
     updateCountdown();
+
+    //DISABLE COPY AND PASTE 
+    $('#user_otp').on('copy paste', function(e) {
+      e.preventDefault();
+    });
   });
 </script>
 

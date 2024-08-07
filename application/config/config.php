@@ -462,8 +462,9 @@ $config['csrf_token_name'] = 'csrf_spis';
 $config['csrf_cookie_name'] = 'csrf_cookie_spis';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
-
+$config['csrf_exclude_uris'] = array(
+    "address/province.*"
+);
 /*
 |--------------------------------------------------------------------------
 | Output Compression

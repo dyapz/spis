@@ -101,7 +101,7 @@ public function validate($username,$password){
        return $query->row_array();
     }
 
-    //FORGOT PASSWORD SEND EMAIL
+    //FORGOT PASSWORD SEND OTP
     public function sendemail_forgotpassword_model($data){
         $recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
      
@@ -237,6 +237,54 @@ public function validate($username,$password){
         return true;
     }
     
+
+    //RE-SEND OTP
+    public function resend_otp_model($user_email){
+
+            $query1=$this->db->query("SELECT * from tbl_users where user_email = '".$user_email."' ");
+            $row=$query1->result_array();
+            if($query1->num_rows()>0){
+        
+            $generatenewotp = "";
+            $generatenewotp  = rand(100000, 999999);
+            $generatenewotpxss = $this->security->xss_clean($generatenewotp);
+            $newotp['user_otp'] = $generatenewotpxss;
+            $this->db->where('user_email', $user_email);
+            $this->db->update('tbl_users', $newotp); 
+
+
+            $hashed_id = md5($row[0]['user_id']);
+        
+            $mail_message='Dear '.$row[0]['user_fname'].','. "\r\n";
+            $mail_message.='<br><br>Verification Code: <b>'.$generatenewotp.'</b>'."\r\n";
+            $mail_message.='<br><br>Thanks & Regards';
+            $mail_message.='<br><br>SocPen Team';  
+        
+            $config['protocol'] = 'smtp';
+            $config['smtp_host'] = 'ssl://smtp.gmail.com';
+            $config['smtp_port'] = '465';
+            $config['smtp_user'] = 'idbs.spt.tm@gmail.com'; 
+            $config['smtp_pass'] = 'tqfakdwakoqvtjxb'; 
+            $config['mailtype'] = 'html'; 
+            $config['charset'] = 'iso-8859-1';
+            $config['wordwrap'] = TRUE; 
+            $config['newline'] = "\r\n"; 
+    
+            $this->load->library('email', $config);
+            $this->email->initialize($config);                        
+            $this->email->from('idbs.spt.tm@gmail.com', 'NOREPLY');
+            $this->email->to($user_email);
+            $this->email->subject('Reset Password');
+            $this->email->message($mail_message);
+    
+            if ($this->email->send()) {
+                redirect('auth/otp_verification/'.$hashed_id);        
+            } else {
+                $this->session->set_flashdata('error','Failed to send OTP, please try again!');
+                redirect('auth');        
+            }
+        }
+    }
 
 }
 

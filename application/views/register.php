@@ -16,8 +16,9 @@
   <title>Register</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?php echo base_url().'assets/css/auth.css'; ?>" rel="stylesheet">
-  <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
 
 <div id="main-content" class="page-transition">
@@ -26,13 +27,20 @@
       <h4 class="card-title mb-4">Register</h4>
       <form action="" method="POST" autocomplete="off">
         <div class="form-group">
-          <select name="region_id" class="form-select <?php echo set_value('region_id') ? 'has-value' : ''; ?>" id="region_id" required>
+          <select name="region_id" class="form-select" id="region_id" required>
             <option value="" disabled selected></option>
               <?php foreach($region as $row){ ?>
-                <option value="<?php echo $row->region_id; ?>" <?php echo set_select('region_id', $row->region_id); ?>><?php echo $row->region_name; ?></option>
+                <option value="<?php echo $row->region_id; ?>"><?php echo $row->region_name; ?></option>
               <?php } ?>
           </select>
-          <label for="region_id" class="form-label">DSWD Field Office</label>
+          <label for="region_id" class="form-label">DSWD Field Office Region</label>
+        </div>
+
+        <div class="form-group">
+          <select name="prov_id" class="form-select <?php echo set_value('prov_id') !== '' ? 'has-value' : ''; ?>" id="prov_id">
+            <option value="" disabled selected>Select Region First</option>
+          </select>
+          <label for="prov_id" class="form-label">DSWD Field Office Province</label>
         </div>
         <div class="form-group">
           <input type="text" name="user_fname" class="form-control" id="user_fname" value="<?php echo !empty($user['user_fname'])?$user['user_fname']:''; ?>" placeholder="" required>
@@ -113,3 +121,46 @@
 </body>
 </html>
 
+
+<script>
+$(document).ready(function() {
+  // Handle region_id change
+  $('#region_id').on('change', function() {
+    var region_id = $(this).val();
+    if (region_id !== '') {
+      $.ajax({
+        url: "<?php echo base_url(); ?>address/province",
+        method: "POST",
+        data: { 
+          region_id: region_id,
+          '<?php echo $csrf['name']; ?>': '<?php echo $csrf['hash']; ?>' 
+        },
+        success: function(data) {
+          $('#prov_id').html(data);
+          // Check if the prov_id has a value and apply has-value class
+          if ($('#prov_id').val() !== '') {
+            $('#prov_id').addClass('has-value');
+          } else {
+            $('#prov_id').removeClass('has-value');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("AJAX Error: " + status + ": " + error);
+          console.log("Response: ", xhr.responseText); 
+        }
+      });
+    } else {
+      $('#prov_id').html('<option value="" disabled selected>Select Region First</option>');
+      $('#prov_id').removeClass('has-value');
+    }
+  });
+
+  // Check if prov_id has a value on page load
+  if ($('#prov_id').val() !== '') {
+    $('#prov_id').addClass('has-value');
+  }
+});
+
+
+
+</script>
