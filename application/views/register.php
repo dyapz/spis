@@ -37,10 +37,10 @@
         </div>
 
         <div class="form-group">
-          <select name="prov_id" class="form-select <?php echo set_value('prov_id') !== '' ? 'has-value' : ''; ?>" id="prov_id">
+          <select name="province_id" class="form-select <?php echo set_value('province_id') !== '' ? 'has-value' : ''; ?>" id="province_id">
             <option value="" disabled selected>Select Region First</option>
           </select>
-          <label for="prov_id" class="form-label">DSWD Field Office Province</label>
+          <label for="province_id" class="form-label">DSWD Field Office Province</label>
         </div>
         <div class="form-group">
           <input type="text" name="user_fname" class="form-control" id="user_fname" value="<?php echo !empty($user['user_fname'])?$user['user_fname']:''; ?>" placeholder="" required>
@@ -145,12 +145,12 @@ $(document).ready(function() {
           '<?php echo $csrf['name']; ?>': '<?php echo $csrf['hash']; ?>' 
         },
         success: function(data) {
-          $('#prov_id').html(data);
-          // Check if the prov_id has a value and apply has-value class
-          if ($('#prov_id').val() !== '') {
-            $('#prov_id').addClass('has-value');
+          $('#province_id').html(data);
+          // Check if the province_id has a value and apply has-value class
+          if ($('#province_id').val() !== '') {
+            $('#province_id').addClass('has-value');
           } else {
-            $('#prov_id').removeClass('has-value');
+            $('#province_id').removeClass('has-value');
           }
         },
         error: function(xhr, status, error) {
@@ -159,14 +159,14 @@ $(document).ready(function() {
         }
       });
     } else {
-      $('#prov_id').html('<option value="" disabled selected>Select Region First</option>');
-      $('#prov_id').removeClass('has-value');
+      $('#province_id').html('<option value="" disabled selected>Select Region First</option>');
+      $('#province_id').removeClass('has-value');
     }
   });
 
-  // Check if prov_id has a value on page load
-  if ($('#prov_id').val() !== '') {
-    $('#prov_id').addClass('has-value');
+  // Check if province_id has a value on page load
+  if ($('#province_id').val() !== '') {
+    $('#province_id').addClass('has-value');
   }
 });
 

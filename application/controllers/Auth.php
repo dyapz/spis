@@ -154,6 +154,7 @@ class Auth extends CI_Controller {
 	
 		if ($this->input->post('registerSubmit')) {
 			$this->form_validation->set_rules('region_id', 'Region', 'required');
+			$this->form_validation->set_rules('province_id', 'Province', 'required');
 			$this->form_validation->set_rules('user_fname', 'First Name', 'required|callback_text_only');
 			$this->form_validation->set_rules('user_mname', 'Middle Name', 'callback_text_only');
 			$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only');
@@ -168,6 +169,7 @@ class Auth extends CI_Controller {
 	
 			$userData = array(
 				'region_id' => strip_tags($this->input->post('region_id')),
+				'province_id' => strip_tags($this->input->post('province_id')),
 				'user_fname' => strip_tags($this->input->post('user_fname')),
 				'user_mname' => strip_tags($this->input->post('user_mname')),
 				'user_lname' => strip_tags($this->input->post('user_lname')),
