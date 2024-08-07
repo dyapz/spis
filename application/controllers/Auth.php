@@ -57,12 +57,14 @@ class Auth extends CI_Controller {
 			$user_fname = $data['user_fname'];
 			$user_mname = $data['user_mname'];
 			$user_lname = $data['user_lname'];
+			$user_active = $data['user_active'];
 			$user_type = $data['user_type'];
 			$sesdata = array(
 				'user_id' => $user_id,
 				'user_fname' => $user_fname,
 				'user_mname' => $user_mname,
 				'user_lname' => $user_lname,
+				'user_active' => $user_active,
 				'user_type' => $user_type,
 				'logged_in' => TRUE
 			);
@@ -80,14 +82,28 @@ class Auth extends CI_Controller {
 
 			$dataauditxss = $this->security->xss_clean($dataaudit);
 			$this->Auditmodel->insert_audit($dataauditxss);
-			
+
+		if($user_active == 0){
+			redirect('main/newuser');
+
+		}else{
 			//LOGIN USER TYPE
 			if($user_type == '1'){
 				echo $this->session->set_flashdata('success','Welcome Back!');
 				redirect('main');
-			}else if($user_type == '0'){
-				redirect('main/newuser');
+				
+			}else if($user_type == '2'){
+
+				redirect('main/supervisor');
+			}else if($user_type == '3'){
+
+				redirect('main/finance');
+
+			}else if($user_type == '4'){
+				redirect('main/encoder');
+				
 			}
+		}
 
 		}elseif($validate->num_rows() == False){
 			echo $this->session->set_flashdata('error','Wrong username or password!');
@@ -120,94 +136,98 @@ class Auth extends CI_Controller {
 
 	//REGISTRATION
 	public function register() {
-
-		$data = $userData = array(); 
-
+		$data = $userData = array();
+	
 		$recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
-
-		$userIp=$this->input->ip_address();
-		
+	
+		$userIp = $this->input->ip_address();
 		$secret = $this->config->item('google_secret');
-
-		$url="https://www.google.com/recaptcha/api/siteverify?secret=".$secret."&response=".$recaptchaResponse."&remoteip=".$userIp;
-
-		$ch = curl_init(); 
-		curl_setopt($ch, CURLOPT_URL, $url); 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-		$output = curl_exec($ch); 
-		curl_close($ch);      
-			
-		$status= json_decode($output, true);
-
-		if($this->input->post('registerSubmit')){ 
-			$this->form_validation->set_rules('region_id', 'Region', 'required'); 
-			$this->form_validation->set_rules('user_fname', 'First Name', 'required|callback_text_only'); 
-			$this->form_validation->set_rules('user_mname', 'Middle Name', 'callback_text_only'); 
-			$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only'); 
-			$this->form_validation->set_rules('user_ename', 'Suffix Name', 'callback_text_only'); 
-			$this->form_validation->set_rules('user_gender', 'Sex', 'required'); 
-			$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|callback_checkEmailDomain|valid_email'); 
-			$this->form_validation->set_rules('user_designation', 'Designation', 'required|callback_text_only'); 
-			$this->form_validation->set_rules('username', 'Username', 'required|callback_checkUsername|callback_textnumber_only'); 
-			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[25]|callback_password_strong'); 
-			$this->form_validation->set_rules('cpassword', 'confirm password', 'required|matches[password]'); 
-			
-			$userData = array( 
-				'region_id' => strip_tags($this->input->post('region_id')), 
-				'user_fname' => strip_tags($this->input->post('user_fname')), 
-				'user_mname' => strip_tags($this->input->post('user_mname')), 
-				'user_lname' => strip_tags($this->input->post('user_lname')), 
-				'user_ename' => strip_tags($this->input->post('user_ename')), 
-				'user_gender' => strip_tags($this->input->post('user_gender')), 
-				'user_email' => strip_tags($this->input->post('user_email')), 
-				'user_designation' => strip_tags($this->input->post('user_designation')), 
-				'username' => strip_tags($this->input->post('username')), 
+		$url = "https://www.google.com/recaptcha/api/siteverify?secret=" . $secret . "&response=" . $recaptchaResponse . "&remoteip=" . $userIp;
+	
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+	
+		$status = json_decode($output, true);
+	
+		if ($this->input->post('registerSubmit')) {
+			$this->form_validation->set_rules('region_id', 'Region', 'required');
+			$this->form_validation->set_rules('user_fname', 'First Name', 'required|callback_text_only');
+			$this->form_validation->set_rules('user_mname', 'Middle Name', 'callback_text_only');
+			$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only');
+			$this->form_validation->set_rules('user_ename', 'Suffix Name', 'callback_text_only');
+			$this->form_validation->set_rules('user_gender', 'Sex', 'required');
+			$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|callback_checkEmailDomain|valid_email');
+			$this->form_validation->set_rules('user_designation', 'Designation', 'required|callback_text_only');
+			$this->form_validation->set_rules('user_type', 'Access Level', 'required');
+			$this->form_validation->set_rules('username', 'Username', 'required|callback_checkUsername|callback_textnumber_only');
+			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[25]|callback_password_strong');
+			$this->form_validation->set_rules('cpassword', 'confirm password', 'required|matches[password]');
+	
+			$userData = array(
+				'region_id' => strip_tags($this->input->post('region_id')),
+				'user_fname' => strip_tags($this->input->post('user_fname')),
+				'user_mname' => strip_tags($this->input->post('user_mname')),
+				'user_lname' => strip_tags($this->input->post('user_lname')),
+				'user_ename' => strip_tags($this->input->post('user_ename')),
+				'user_gender' => strip_tags($this->input->post('user_gender')),
+				'user_email' => strip_tags($this->input->post('user_email')),
+				'user_designation' => strip_tags($this->input->post('user_designation')),
+				'user_type' => strip_tags($this->input->post('user_type')),
+				'username' => strip_tags($this->input->post('username')),
 				'password' => md5($this->input->post('password'))
-			); 
-
+			);
+	
 			$dataxss = $this->security->xss_clean($userData);
-
-			if($this->form_validation->run() == true && $status['success']){ 
-				$insert = $this->Authmodel->register_model($dataxss); 
-				if($insert){ 
+	
+			if ($this->form_validation->run() == true && $status['success']) {
+				$insert = $this->Authmodel->register_model($dataxss);
+				if ($insert) {
 					$insert_id = $this->db->insert_id();
 					$getip = json_decode(file_get_contents("http://ipinfo.io/"));
 					$dataaudit = array(
-						'user_id'     => $insert_id,
-						'action'     => 'Registration',
-						'controller'     => 'auth/register',
-						'ip_address'     => $getip->ip
+						'user_id' => $insert_id,
+						'action' => 'Registration',
+						'controller' => 'auth/register',
+						'key_value' => 'I',
+						'ip_address' => $getip->ip
 					);
-
+	
 					$dataauditxss = $this->security->xss_clean($dataaudit);
 					$this->Auditmodel->insert_audit($dataauditxss);
-
-					echo $this->session->set_flashdata('success', 'Your account registration has been successful. For security purposes, Your account is pending and for review by our staff before activation. This usally takes less than an a hour! Thank you'); 
-					redirect('auth'); 
-				}else{ 
-					$data['error_msg'] = 'Some problems occured, please try again.'; 
-				} 
-			}else{ 
+	
+					echo $this->session->set_flashdata('success', 'Your account registration has been successful. For security purposes, Your account is pending and for review by our staff before activation. This usally takes less than an hour! Thank you');
+					redirect('auth');
+				} else {
+					$data['error_msg'] = 'Some problems occured, please try again.';
+				}
+			} else {
 				$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha Unsuccessful!!');
 			}
-		} 
-
+		}
+	
 		$data['user'] = $userData;
 		$data['region'] = $this->Addressmodel->select_region();
 		$this->load->view('register', $data);
 	}
-
-
-
-	//TEXT ONLY VALIDATION
-	public function text_only($str){
-		if(preg_match('/^[a-zA-Z ]+$/', $str)){
+	
+	
+	// TEXT ONLY VALIDATION
+	public function text_only($str) {
+		if (empty($str)) {
 			return TRUE;
 		}
-			$this->form_validation->set_message('text_only', 'No special characters and numbers allowed'); 
-			return FALSE;
+	
+		if (preg_match('/^[a-zA-Z ]+$/', $str)) {
+			return TRUE;
+		}
+	
+		$this->form_validation->set_message('text_only', 'No special characters and numbers allowed');
+		return FALSE;
 	}
-
+	
 
 	//TEXT AND NUMBER ONLY VALIDATION
 	public function textnumber_only($str){

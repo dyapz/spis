@@ -65,9 +65,9 @@
         <div class="form-group">
             <select name="user_gender" class="form-select <?php echo set_value('user_gender') ? 'has-value' : ''; ?>" id="user_gender" required>
                 <option value="" disabled <?php echo empty($user['user_gender']) ? 'selected' : ''; ?>></option>
-                <option value="1" <?php echo set_select('region_id', '1'); ?>>Male</option>
-                <option value="2" <?php echo set_select('region_id', '2'); ?>>Female</option>
-                <option value="3" <?php echo set_select('region_id', '3'); ?>>Member of LGBTTQQIA+++</option>
+                <option value="1" <?php echo set_select('user_gender', '1'); ?>>Male</option>
+                <option value="2" <?php echo set_select('user_gender', '2'); ?>>Female</option>
+                <option value="3" <?php echo set_select('user_gender', '3'); ?>>Member of LGBTTQQIA+++</option>
             </select>
             <label for="user_gender" class="form-label">Gender</label>
         </div>
@@ -81,6 +81,15 @@
           <input type="text" name="user_designation" class="form-control" id="user_designation" value="<?php echo !empty($user['user_designation'])?$user['user_designation']:''; ?>" placeholder="" required>
           <label for="user_designation" class="form-label">Designation</label>
           <?php echo form_error('user_designation','<p class="help-block text-danger">','</p>'); ?>
+        </div>
+        <div class="form-group">
+            <select name="user_type" class="form-select <?php echo set_value('user_type') ? 'has-value' : ''; ?>" id="user_type" required>
+                <option value="" disabled <?php echo empty($user['user_type']) ? 'selected' : ''; ?>></option>
+                <option value="2" <?php echo set_select('user_type', '2'); ?>>Supervisor</option>
+                <option value="3" <?php echo set_select('user_type', '3'); ?>>Finance</option>
+                <option value="4" <?php echo set_select('user_type', '4'); ?>>Encoder</option>
+            </select>
+            <label for="user_type" class="form-label">Access Level</label>
         </div>
         <div class="form-group">
           <input type="text" name="username" class="form-control" id="username" value="<?php echo !empty($user['username'])?$user['username']:''; ?>" placeholder="" required>
