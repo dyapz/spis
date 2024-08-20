@@ -19,11 +19,29 @@ class Auth extends CI_Controller {
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
 
+	 private $user_type;
+	 private $user_type_redirects;
+ 
+	 public function __construct() {
+		 parent::__construct();
+ 
+		 $this->user_type_redirects = [
+			 '1' => 'admin',
+			 '2' => 'supervisor',
+			 '3' => 'finance',
+			 '4' => 'encoder'
+			];
+ 
+		 $this->user_type = $this->session->userdata('user_type');
+	 }
+
+
 	 public function index(){
-		if($this->session->userdata('user_type') == '1'){ 
-			redirect('main');
-		}else{
+		if(!$this->user_type){
 			$this->load->view('login');
+		}elseif (isset($this->user_type_redirects[$this->user_type])) {
+			redirect($this->user_type_redirects[$this->user_type]);
+
 		}
 	}
 
@@ -51,7 +69,8 @@ class Auth extends CI_Controller {
 		$status= json_decode($output, true);
 
 		// VALIDATE IF USERNAME AND RECAPTCHA IS SUCCESSFULL
-		if($validate->num_rows() > 0 && $status['success']){
+		if($validate->num_rows() > 0){
+		// if($validate->num_rows() > 0 && $status['success']){
 			$data  = $validate->row_array();
 			$user_id = $data['user_id'];
 			$user_fname = $data['user_fname'];
@@ -84,34 +103,32 @@ class Auth extends CI_Controller {
 			$this->Auditmodel->insert_audit($dataauditxss);
 
 		if($user_active == 0){
-			redirect('main/newuser');
+			redirect('auth/newuser');
 
 		}else{
 			//LOGIN USER TYPE
-			if($user_type == '1'){
-				echo $this->session->set_flashdata('success','Welcome Back!');
-				redirect('main');
-				
-			}else if($user_type == '2'){
-
-				redirect('main/supervisor');
-			}else if($user_type == '3'){
-
-				redirect('main/finance');
-
-			}else if($user_type == '4'){
-				redirect('main/encoder');
-				
+			$user_redirects = [
+				'1' => 'admin',
+				'2' => 'supervisor',
+				'3' => 'finance',
+				'4' => 'encoder',
+			];
+			
+			if (isset($user_redirects[$user_type])) {
+				$this->session->set_flashdata('success', 'Welcome back '.$this->session->user_fname.'!');
+				redirect($user_redirects[$user_type]);
 			}
+			
 		}
 
 		}elseif($validate->num_rows() == False){
 			echo $this->session->set_flashdata('error','Wrong username or password!');
 			redirect('auth');
-		}elseif($status['success'] == False){
-			echo $this->session->set_flashdata('gcaptcha_error','Sorry Recaptcha Unsuccessful!!!');
-			redirect('auth');
 		}
+		// elseif($status['success'] == False){
+		// 	echo $this->session->set_flashdata('gcaptcha_error','Sorry Recaptcha Unsuccessful!!!');
+		// 	redirect('auth');
+		// }
 	}
 
 
@@ -136,83 +153,88 @@ class Auth extends CI_Controller {
 
 	//REGISTRATION
 	public function register() {
-		$data = $userData = array();
-	
-		$recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
-	
-		$userIp = $this->input->ip_address();
-		$secret = $this->config->item('google_secret');
-		$url = "https://www.google.com/recaptcha/api/siteverify?secret=" . $secret . "&response=" . $recaptchaResponse . "&remoteip=" . $userIp;
-	
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$output = curl_exec($ch);
-		curl_close($ch);
-	
-		$status = json_decode($output, true);
-	
-		if ($this->input->post('registerSubmit')) {
-			$this->form_validation->set_rules('region_id', 'Region', 'required');
-			$this->form_validation->set_rules('province_id', 'Province', 'required');
-			$this->form_validation->set_rules('user_fname', 'First Name', 'required|callback_text_only');
-			$this->form_validation->set_rules('user_mname', 'Middle Name', 'callback_text_only');
-			$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only');
-			$this->form_validation->set_rules('user_ename', 'Suffix Name', 'callback_text_only');
-			$this->form_validation->set_rules('user_gender', 'Sex', 'required');
-			$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|callback_checkEmailDomain|valid_email');
-			$this->form_validation->set_rules('user_designation', 'Designation', 'required|callback_text_only');
-			$this->form_validation->set_rules('user_type', 'Access Level', 'required');
-			$this->form_validation->set_rules('username', 'Username', 'required|callback_checkUsername|callback_textnumber_only');
-			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[25]|callback_password_strong');
-			$this->form_validation->set_rules('cpassword', 'confirm password', 'required|matches[password]');
-	
-			$userData = array(
-				'region_id' => strip_tags($this->input->post('region_id')),
-				'province_id' => strip_tags($this->input->post('province_id')),
-				'user_fname' => strip_tags($this->input->post('user_fname')),
-				'user_mname' => strip_tags($this->input->post('user_mname')),
-				'user_lname' => strip_tags($this->input->post('user_lname')),
-				'user_ename' => strip_tags($this->input->post('user_ename')),
-				'user_gender' => strip_tags($this->input->post('user_gender')),
-				'user_email' => strip_tags($this->input->post('user_email')),
-				'user_designation' => strip_tags($this->input->post('user_designation')),
-				'user_type' => strip_tags($this->input->post('user_type')),
-				'username' => strip_tags($this->input->post('username')),
-				'password' => md5($this->input->post('password'))
-			);
-	
-			$dataxss = $this->security->xss_clean($userData);
-	
-			if ($this->form_validation->run() == true && $status['success']) {
-				$insert = $this->Authmodel->register_model($dataxss);
-				if ($insert) {
-					$insert_id = $this->db->insert_id();
-					$getip = json_decode(file_get_contents("http://ipinfo.io/"));
-					$dataaudit = array(
-						'user_id' => $insert_id,
-						'action' => 'Registration',
-						'controller' => 'auth/register',
-						'key_value' => 'I',
-						'ip_address' => $getip->ip
-					);
-	
-					$dataauditxss = $this->security->xss_clean($dataaudit);
-					$this->Auditmodel->insert_audit($dataauditxss);
-	
-					echo $this->session->set_flashdata('success', 'Your account registration has been successful. For security purposes, Your account is pending and for review by our staff before activation. This usally takes less than an hour! Thank you');
-					redirect('auth');
+		if (isset($this->user_type_redirects[$this->user_type])) {
+			redirect($this->user_type_redirects[$this->user_type]);
+
+		}else{
+
+			$data = $userData = array();
+		
+			$recaptchaResponse = trim($this->input->post('g-recaptcha-response'));
+		
+			$userIp = $this->input->ip_address();
+			$secret = $this->config->item('google_secret');
+			$url = "https://www.google.com/recaptcha/api/siteverify?secret=" . $secret . "&response=" . $recaptchaResponse . "&remoteip=" . $userIp;
+		
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			$output = curl_exec($ch);
+			curl_close($ch);
+		
+			$status = json_decode($output, true);
+		
+			if ($this->input->post('registerSubmit')) {
+				$this->form_validation->set_rules('region_id', 'Region', 'required');
+				$this->form_validation->set_rules('province_id', 'Province', 'required');
+				$this->form_validation->set_rules('user_fname', 'First Name', 'required|callback_text_only');
+				$this->form_validation->set_rules('user_mname', 'Middle Name', 'callback_text_only');
+				$this->form_validation->set_rules('user_lname', 'Last Name', 'required|callback_text_only');
+				$this->form_validation->set_rules('user_ename', 'Suffix Name', 'callback_text_only');
+				$this->form_validation->set_rules('user_gender', 'Sex', 'required');
+				$this->form_validation->set_rules('user_email', 'Email', 'required|callback_checkEmail|callback_checkEmailDomain|valid_email');
+				$this->form_validation->set_rules('user_designation', 'Designation', 'required|callback_text_only');
+				$this->form_validation->set_rules('user_type', 'Access Level', 'required');
+				$this->form_validation->set_rules('username', 'Username', 'required|callback_checkUsername|callback_textnumber_only');
+				$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[25]|callback_password_strong');
+				$this->form_validation->set_rules('cpassword', 'confirm password', 'required|matches[password]');
+		
+				$userData = array(
+					'region_id' => strip_tags($this->input->post('region_id')),
+					'province_id' => strip_tags($this->input->post('province_id')),
+					'user_fname' => strip_tags($this->input->post('user_fname')),
+					'user_mname' => strip_tags($this->input->post('user_mname')),
+					'user_lname' => strip_tags($this->input->post('user_lname')),
+					'user_ename' => strip_tags($this->input->post('user_ename')),
+					'user_gender' => strip_tags($this->input->post('user_gender')),
+					'user_email' => strip_tags($this->input->post('user_email')),
+					'user_designation' => strip_tags($this->input->post('user_designation')),
+					'user_type' => strip_tags($this->input->post('user_type')),
+					'username' => strip_tags($this->input->post('username')),
+					'password' => md5($this->input->post('password'))
+				);
+		
+				$dataxss = $this->security->xss_clean($userData);
+		
+				if ($this->form_validation->run() == true && $status['success']) {
+					$insert = $this->Authmodel->register_model($dataxss);
+					if ($insert) {
+						$insert_id = $this->db->insert_id();
+						$getip = json_decode(file_get_contents("http://ipinfo.io/"));
+						$dataaudit = array(
+							'user_id' => $insert_id,
+							'action' => 'Registration',
+							'controller' => 'auth/register',
+							'key_value' => 'I',
+							'ip_address' => $getip->ip
+						);
+		
+						$dataauditxss = $this->security->xss_clean($dataaudit);
+						$this->Auditmodel->insert_audit($dataauditxss);
+		
+						echo $this->session->set_flashdata('success', 'Your account registration has been successful. For security purposes, Your account is pending and for review by our staff before activation. This usally takes less than an hour! Thank you');
+						redirect('auth');
+					} else {
+						$data['error_msg'] = 'Some problems occured, please try again.';
+					}
 				} else {
-					$data['error_msg'] = 'Some problems occured, please try again.';
+					$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha unsuccessful!!');
 				}
-			} else {
-				$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha Unsuccessful!!');
 			}
+			$data['user'] = $userData;
+			$data['region'] = $this->Addressmodel->select_region();
+			$this->load->view('register', $data);
 		}
-	
-		$data['user'] = $userData;
-		$data['region'] = $this->Addressmodel->select_region();
-		$this->load->view('register', $data);
 	}
 	
 	
@@ -411,14 +433,14 @@ class Auth extends CI_Controller {
 						$dataauditxss = $this->security->xss_clean($dataaudit);
 						$this->Auditmodel->insert_audit($dataauditxss);
 
-						$this->session->set_flashdata('success', 'Password Changed Successfully!');
+						$this->session->set_flashdata('success', 'Password changed successfully!');
 						redirect('auth');
 
 					}else{ 
 						$data['error_msg'] = 'Some problems occured, please try again.'; 
 					} 
 				}else{ 
-					$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha Unsuccessful!!');
+					$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha unsuccessful!!');
 				}
 
 			}
@@ -445,6 +467,21 @@ class Auth extends CI_Controller {
 
 		}
 
+	}
+
+	// NEW USER REDIRECT LOGIN
+	public function newuser(){
+		if (!$this->user_type) {
+			$this->session->set_flashdata("error", "Sorry, you don't have permission to access the page you were trying to reach!");
+			redirect('auth');
+
+		} elseif (isset($this->user_type_redirects[$this->user_type]) && $this->session->userdata('user_active') == 1) {
+			$this->session->set_flashdata("error", "Sorry, you don't have permission to access the page you were trying to reach!");
+			redirect($this->user_type_redirects[$this->user_type]);
+			
+		}else{
+			$this->load->view('newuser');
+		}
 	}
 
 }

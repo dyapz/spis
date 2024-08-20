@@ -20,10 +20,24 @@ class Address extends CI_Controller {
 	 */
 
 	//  PROVINCE
-    public function province() {
-        if ($this->input->post('region_id')) {
-          echo $this->Addressmodel->select_province($this->input->post('region_id'));
-        } 
-      }
+	public function province() {
+		if ($this->input->post('region_id')) {
+			echo $this->Addressmodel->select_province($this->input->post('region_id'));
+		} 
+	}
+
+	//  MUNICIPALITY
+	public function municipality(){
+		if($this->input->post('province_id')){
+			echo $this->Addressmodel->select_municipality($this->input->post('province_id'));
+		}
+	}
+
+	//  BARANGAY
+	public function barangay(){
+		if($this->input->post('city_id')){
+			echo $this->Addressmodel->select_barangay($this->input->post('city_id'));
+		}
+	}
 
 }

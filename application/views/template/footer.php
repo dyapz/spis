@@ -1,3 +1,12 @@
+    
+    <script>
+        // Alert Fade Effect
+        $(document).ready(function() {
+        $('.alert').hide();
+        $('.alert').fadeTo(2000, 500).slideUp(500);
+    });
+    </script>
+
     <script>
         // Show/hide main dropdown menu
         $('.dropdown').hover(function() {

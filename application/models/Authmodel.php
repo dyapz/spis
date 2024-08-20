@@ -154,11 +154,11 @@ public function validate($username,$password){
             $this->email->initialize($config);                        
             $this->email->from('idbs.spt.tm@gmail.com', 'NOREPLY');
             $this->email->to($user_email);
-            $this->email->subject('Reset Password');
+            $this->email->subject('REQUEST OTP');
             $this->email->message($mail_message);
     
             if ($this->email->send() && $status['success']) {
-                redirect('auth/otp_verification/'.$hashed_id);        
+                redirect('auth/otp_verification/'.$hashed_id.'/'.md5($generatenewotp));        
             } else {
                 $this->session->set_flashdata('error','Failed to send password, please try again!');
                 redirect('auth');        
@@ -197,6 +197,7 @@ public function validate($username,$password){
         return $query->row_array();
     }
 
+    
     // OTP EXPIRY CHECK
     public function otp_verify_expired_model($user_id) {
         $this->db->select('user_id');
@@ -274,7 +275,7 @@ public function validate($username,$password){
             $this->email->initialize($config);                        
             $this->email->from('idbs.spt.tm@gmail.com', 'NOREPLY');
             $this->email->to($user_email);
-            $this->email->subject('Reset Password');
+            $this->email->subject('REQUEST OTP');
             $this->email->message($mail_message);
     
             if ($this->email->send()) {

@@ -24,11 +24,11 @@ foreach($new_password as $row) {
 </head>
 <body>
 
-<div class="card shadow" style="width: 30rem; margin-top: -200px">
+<div class="card card-shadow" style="width: 30rem; margin-top: -200px">
+    <div class="card-header">CHANGE PASSWORD</div>
     <div class="card-body">
         <div class="container">
             <form action="" method="POST" autocomplete="off" class="my-4">
-                <h6 class="text-center mb-5">CHANGE PASSWORD</h6>
                 <p class="text-danger"><?php echo $this->session->flashdata('error');?></p>
 
                 <div class="form-group">
@@ -52,12 +52,14 @@ foreach($new_password as $row) {
                 <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-custom">Update</button>
+                    <button type="submit" class="btn btn-custom w-100">Update</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
 
     
 <script src="https://kit.fontawesome.com/092843e6dd.js" crossorigin="anonymous"></script>

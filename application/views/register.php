@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-group">
-          <select name="province_id" class="form-select <?php echo set_value('province_id') !== '' ? 'has-value' : ''; ?>" id="province_id" required>
+          <select name="province_id" class="form-select <?php echo set_value('province_id') !== '' ? 'has-value' : ''; ?>" id="province_id">
             <option value="" disabled selected>Select Region First</option>
           </select>
           <label for="province_id" class="form-label">DSWD Field Office Province</label>

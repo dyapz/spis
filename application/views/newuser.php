@@ -9,8 +9,15 @@
 </head>
 <body>
 
+
+
+
 <div class="card shadow" style="width: 50rem; margin-top: -500px">
-  <div class="card-body">
+
+<div class="card-body">
+<div>
+  <p class="text-danger"><?php echo $this->session->flashdata('error');?></p>
+</div>
     <h5 class="card-title mb-4">We're reviewing your account. </h5>
     <p class="card-text">For security purposes, your account is pending and under review by our staff before activation. <br>
         This usually takes less than an hour. We'll update you soon!,  For more information, please call _________ or email _________. </p>

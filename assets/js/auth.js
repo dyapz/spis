@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   var selects = document.querySelectorAll('.form-select');
-  
   selects.forEach(function(select) {
-    // Check if select already has a value and add 'has-value' class
     if (select.value) {
       select.classList.add('has-value');
     }
@@ -44,8 +42,6 @@ document.getElementById("login-link")?.addEventListener("click", function(event)
 window.addEventListener('load', () => {
   mainContent.classList.add('visible');
 });
-
-
 
 
 
