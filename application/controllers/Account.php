@@ -38,12 +38,12 @@ class Account extends CI_Controller {
 			redirect('auth');
 		}else{
 			$this->load->view('template/header');
-			$this->load->view('template/nav');
-			if($this->session->userdata('user_type') != 1){
-				$this->load->view('account/settings');
+			if($this->session->userdata('user_type') == 1){ 
+				$this->load->view('template/admin-nav');
 			}else{
-				$this->load->view('account/admin_settings');
+				$this->load->view('template/nav');
 			}
+				$this->load->view('account/settings');
 			$this->load->view('template/footer');
 		}
 	}
@@ -106,7 +106,11 @@ class Account extends CI_Controller {
 			if ($user_id !== null) {
 				$data['profile'] = $this->Accountmodel->user_data_model($user_id);
 				$this->load->view('template/header');
-				$this->load->view('template/nav');
+				if($this->session->userdata('user_type') == 1){ 
+					$this->load->view('template/admin-nav');
+				}else{
+					$this->load->view('template/nav');
+				}
 				$this->load->view('account/profile', $data);
 				$this->load->view('template/footer');
 			} else {
@@ -195,7 +199,7 @@ class Account extends CI_Controller {
 
 						$dataaudit = array(
 							'user_id' => strip_tags($this->input->post('user_id')),
-							'action' => 'Registration',
+							'action' => 'Change Password',
 							'controller' => 'account/change_password',
 							'key_value' => 'U',
 							'field' => 'password',
@@ -218,7 +222,11 @@ class Account extends CI_Controller {
 			if ($user_id !== null) {
 				$data['change_password'] = $this->Accountmodel->user_data_model($user_id);
 				$this->load->view('template/header');
-				$this->load->view('template/nav');
+				if($this->session->userdata('user_type') == 1){ 
+					$this->load->view('template/admin-nav');
+				}else{
+					$this->load->view('template/nav');
+				}
 				$this->load->view('account/change_password', $data);
 				$this->load->view('template/footer');
 			} else {
@@ -265,7 +273,7 @@ class Account extends CI_Controller {
 
 
 	// USER LIST
-    public function user_list(){
+    public function users(){
 		if(!$this->session->userdata('user_type')){ 
 			$this->session->set_flashdata("error", "Sorry you don't have permission to access the page you were trying to reach!");
 			redirect('auth');
@@ -276,7 +284,11 @@ class Account extends CI_Controller {
 
 			// $data['new_registered_notif'] = $this->Accountmodel->new_registered_notif_model();
 			$this->load->view('template/header');
-			$this->load->view('template/nav');
+			if($this->session->userdata('user_type') == 1){ 
+				$this->load->view('template/admin-nav');
+			}else{
+				$this->load->view('template/nav');
+			}
 			$this->load->view('account/user_list');
 			$this->load->view('template/footer');
 		}
@@ -315,7 +327,7 @@ class Account extends CI_Controller {
 			$row[] = $post->user_designation;
 			$row[] = '<div class="text-center">'.$post->username.'</div>';
 			$row[] = '<div class="text-center user-type">'.$user_type.'</div>';
-			$row[] = '<div class="text-center">'.date('d F Y h:i A',strtotime($post->user_timestamp)).'</div>';
+			$row[] = '<div class="text-center">'.date('F d, Y',strtotime($post->date_registered)).'</div>';
 			$row[] = '<div class="text-center"><p class="'.$user_active.'">'.$user_active.'</p></div>';
 			$row[] = '<div class="text-center"><a href="#" class="edit-user" data-userid="'.$post->user_id.'" data-type="'.$post->user_type.'"><i class="fa-solid fa-pen-to-square"></i></a> | <a href="delete/'.$post->user_id.'" onclick="return confirm(\'Are you sure you want to delete?\')"><i class="fa-solid fa-trash-can text-danger"></i></a></div>';
 
@@ -352,11 +364,11 @@ class Account extends CI_Controller {
 			$this->Auditmodel->insert_audit($dataauditxss);
 
             $this->session->set_flashdata('success', 'The account has been deactivated successfully!');
-            Redirect('account/user_list', true);
+            Redirect('account/users', true);
 
         }else{
             $this->session->set_flashdata('error', "Error!");
-            Redirect('account/user_list', false);
+            Redirect('account/users', false);
 
         }
     }
@@ -365,6 +377,9 @@ class Account extends CI_Controller {
 	// USER ACTIVATE
 	public function activate($user_id){
         if($this->Accountmodel->activate_model($user_id)){
+			
+			$get_email = $this->Accountmodel->get_user_email($user_id);
+			$user_email = $get_email->user_email;
 
 			$getip = json_decode(file_get_contents("http://ipinfo.io/"));
 
@@ -379,15 +394,20 @@ class Account extends CI_Controller {
 				'ip_address' => $getip->ip
 			);
 
+
+
 			$dataauditxss = $this->security->xss_clean($dataaudit);
+
 			$this->Auditmodel->insert_audit($dataauditxss);
 
+			$this->Accountmodel->activate_email_model($user_email);
+
             $this->session->set_flashdata('success', 'The account has been activated successfully!');
-            Redirect('account/user_list', true);
+            Redirect('account/users', true);
 
         }else{
             $this->session->set_flashdata('error', "Error!");
-            Redirect('account/user_list', false);
+            Redirect('account/users', false);
 
         }
     }
@@ -410,15 +430,16 @@ class Account extends CI_Controller {
 			$this->Auditmodel->insert_audit($dataauditxss);
 
             $this->session->set_flashdata('success', 'The account has been deleted successfully!');
-            Redirect('account/user_list', true);
+            Redirect('account/users', true);
 
         }else{
             $this->session->set_flashdata('error', "Error!");
-            Redirect('account/user_list', false);
+            Redirect('account/users', false);
 
         }
     }
 
+	// UPDATE USER ACCESS LEVEL
 	public function update_user(){
 		$data = array(
 			'user_id' => strip_tags($this->input->post('user_id')),
@@ -448,12 +469,12 @@ class Account extends CI_Controller {
 
 			$this->session->set_flashdata('success', 'Updated successfully!');
 
-			Redirect('account/user_list', true);
+			Redirect('account/users', true);
 
 
 		} else {
 			$this->session->set_flashdata('error', "Error!");
-			Redirect('account/user_list', false);
+			Redirect('account/users', false);
 		}
 
 	}

@@ -20,22 +20,22 @@ foreach($profile as $row){
         <div class="card-body">
             <form action="" method="POST" autocomplete="off" class="p-4">
                 <div class="form-group ">
-                    <input type="text" name="user_fname" class="form-control <?php echo set_value('user_fname') ? 'has-value' : ''; ?> " id="user_fname" value="<?php echo set_value('user_fname', $row->user_fname); ?>" placeholder="" required>
+                    <input type="text" name="user_fname" class="form-control form-custom <?php echo set_value('user_fname') ? 'has-value' : ''; ?> " id="user_fname" value="<?php echo set_value('user_fname', $row->user_fname); ?>" placeholder="" required>
                     <label for="user_fname" class="form-label">First Name</label>
                     <?php echo form_error('user_fname','<p class="help-block text-danger">','</p>'); ?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="user_mname" class="form-control  <?php echo set_value('user_mname') ? 'has-value' : ''; ?>" id="user_mname" value="<?php echo set_value('user_mname', $row->user_mname); ?>" placeholder="">
+                    <input type="text" name="user_mname" class="form-control form-custom  <?php echo set_value('user_mname') ? 'has-value' : ''; ?>" id="user_mname" value="<?php echo set_value('user_mname', $row->user_mname); ?>" placeholder="">
                     <label for="user_mname" class="form-label">Middle Name</label>
                     <?php echo form_error('user_mname','<p class="help-block text-danger">','</p>'); ?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="user_lname" class="form-control  <?php echo set_value('user_lname') ? 'has-value' : ''; ?>" id="user_lname" value="<?php echo set_value('user_lname', $row->user_lname); ?>" placeholder="" required>
+                    <input type="text" name="user_lname" class="form-control form-custom  <?php echo set_value('user_lname') ? 'has-value' : ''; ?>" id="user_lname" value="<?php echo set_value('user_lname', $row->user_lname); ?>" placeholder="" required>
                     <label for="user_lname" class="form-label">Last Name</label>
                     <?php echo form_error('user_lname','<p class="help-block text-danger">','</p>'); ?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="user_ename" class="form-control  <?php echo set_value('user_ename') ? 'has-value' : ''; ?>" id="user_ename" value="<?php echo set_value('user_ename', $row->user_ename); ?>" placeholder="">
+                    <input type="text" name="user_ename" class="form-control form-custom  <?php echo set_value('user_ename') ? 'has-value' : ''; ?>" id="user_ename" value="<?php echo set_value('user_ename', $row->user_ename); ?>" placeholder="">
                     <label for="user_ename" class="form-label">Ext. (III, Jr.)</label>
                     <?php echo form_error('user_ename','<p class="help-block text-danger">','</p>'); ?>
                 </div>
@@ -50,20 +50,20 @@ foreach($profile as $row){
                 </div>
 
                 <div class="form-group">
-                    <input type="email" name="" class="form-control" id="user_email" value="<?php echo $row->user_email; ?>" placeholder="" readonly>
+                    <input type="email" name="" class="form-control form-custom" id="user_email" value="<?php echo $row->user_email; ?>" placeholder="" readonly>
                     <label for="user_email" class="form-label">Email Address</label>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="user_designation" class="form-control <?php echo set_value('user_designation') ? 'has-value' : ''; ?>" id="user_designation" value="<?php echo set_value('user_designation', $row->user_designation); ?>" placeholder="" required>
+                    <input type="text" name="user_designation" class="form-control form-custom <?php echo set_value('user_designation') ? 'has-value' : ''; ?>" id="user_designation" value="<?php echo set_value('user_designation', $row->user_designation); ?>" placeholder="" required>
                     <label for="user_designation" class="form-label">Designation</label>
                     <?php echo form_error('user_designation','<p class="help-block text-danger">','</p>'); ?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="" class="form-control" id="user_type" value="<?php echo $user_type; ?>" placeholder="" readonly>
+                    <input type="text" name="" class="form-control form-custom" id="user_type" value="<?php echo $user_type; ?>" placeholder="" readonly>
                     <label for="user_type" class="form-label">Access Level</label>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="" class="form-control" id="username" value="<?php echo $row->username; ?>" placeholder="" readonly>
+                    <input type="text" name="" class="form-control form-custom" id="username" value="<?php echo $row->username; ?>" placeholder="" readonly>
                     <label for="username" class="form-label">Username</label>
                 </div>
                 <!-- OLD VALUE -->
@@ -76,8 +76,9 @@ foreach($profile as $row){
 
                 <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                 <input type="hidden" name="user_id" value="<?php echo $row->user_id; ?>" />
-                <input type="submit" name="updateProfileSubmit" value="Update" class="btn btn-custom w-100 mb-2" onclick="return confirm('Are you sure you want to update?')">
-                <a href="<?php echo base_url().'account/settings'; ?>" class="btn btn-danger w-100">Cancel</a>
+                <button type="submit" name="updateProfileSubmit" class="btn btn-custom w-100 mb-4 hvr-float-shadow" onclick="return confirm('Are you sure you want to update?')"><i class="fa-solid fa-floppy-disk"></i> Update</button>
+
+                <a href="<?php echo base_url().'account/settings'; ?>" class="btn btn-danger w-100 hvr-float-shadow"><i class="fa-solid fa-xmark"></i> Cancel</a>
             </form>
             <?php } ?>
         </div>

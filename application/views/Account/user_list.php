@@ -12,7 +12,7 @@ $csrf = array(
 
 <div class="container-fluid d-flex justify-content-center">
     <div class="card card-shadow mt-4" style="width: 115rem;">
-    <div class="card-header">User List</div>
+    <div class="card-header">User</div>
         <div class="card-body">
         <div id="bfrtip-btn" class="d-flex justify-content-end"></div>
 
@@ -65,14 +65,51 @@ $csrf = array(
                 <input type="hidden" id="editUserId" name="user_id">
                 <input type="hidden" id="editOldUserType" name="old_user_type">
                 <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
-                <input type="submit" value="Update" class="btn btn-custom " onclick="return confirm('Are you sure you want to update?')">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-custom hvr-float-shadow" onclick="return confirm('Are you sure you want to update?')"><i class="fa-solid fa-floppy-disk"></i> Search</button>
+                <button type="button" class="btn btn-danger hvr-float-shadow" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+
+<!-- Add New Modal-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST" autocomplete="off">
+
+                <div class="form-group">
+                      <input type="text" name="client_lname" class="form-control form-custom" id="client_lname" placeholder="" required>
+                      <label for="client_lname" class="form-label">Last Name</label>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="text" name="client_fname" class="form-control form-custom" id="client_fname" placeholder="" required>
+                      <label for="client_fname" class="form-label">First Name</label>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="text" name="birthdate" class="form-control form-custom date-picker" id="birthdate" placeholder="" required>
+                      <label for="birthdate" class="form-label">Birthdate <span style="font-size: 12px" >(yyyy-mm-dd)</span></label>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
+                <input type="submit" value="Search" class="btn btn-custom">
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
@@ -83,32 +120,33 @@ $csrf = array(
             .appendTo('#spis_table thead');
 
         var table = $('#spis_table').DataTable({
-			responsive: true,
-            order: [[10, 'desc']],
+            processing: true,
+            order: [[9, 'desc']],
             orderCellsTop: true,
             fixedHeader: true,
-            dom: 'lBfrtip',
+            dom: 'Blrtip', 
+            language: {          
+                        processing: '<div class="loading-indicator"><img src="<?php echo base_url('assets/img/loading.gif'); ?>" alt="Loading" /></div>',
+            },
             buttons: [
-            {
-                extend: 'copyHtml5',
-                text: '<i class="fa-solid fa-copy"></i> COPY',
-                className: 'copy-btn',
-                title: '',
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                text: '<i class="fa-solid fa-file-excel"></i> EXPORT TO EXCEL',
-                className: 'excel-btn',
-                title: 'Social Pension Information System - User List',
-                footer: true,
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                }
-            },
-        ],
+                    // {
+                    //     extend: 'excelHtml5',
+                    //     text: '<i class="fa-solid fa-file-excel"></i> EXPORT TO EXCEL',
+                    //     className: 'excel-btn hvr-float-shadow',
+                    //     title: 'SOCIAL PENSION CLIENT LIST',
+                    //     footer: true,
+                    //     exportOptions: {
+                    //     columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+                    //     }
+                    // },
+                    {
+                        text: '<i class="fa-solid fa-plus "></i> Add New Record',
+                        className: 'add-btn hvr-float-shadow',
+                        action: function () {
+                            $('#addModal').modal('show');
+                        },
+                    },
+                ],
 
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             ajax: {

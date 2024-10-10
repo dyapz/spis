@@ -1,3 +1,10 @@
+<?php 
+  $csrf = array(
+    'name' => $this->security->get_csrf_token_name(),
+    'hash' => $this->security->get_csrf_hash()
+  );
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

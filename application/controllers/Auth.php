@@ -206,7 +206,8 @@ class Auth extends CI_Controller {
 		
 				$dataxss = $this->security->xss_clean($userData);
 		
-				if ($this->form_validation->run() == true && $status['success']) {
+				// if ($this->form_validation->run() == true && $status['success']) {
+				if ($this->form_validation->run() == true) {
 					$insert = $this->Authmodel->register_model($dataxss);
 					if ($insert) {
 						$insert_id = $this->db->insert_id();
@@ -227,9 +228,10 @@ class Auth extends CI_Controller {
 					} else {
 						$data['error_msg'] = 'Some problems occured, please try again.';
 					}
-				} else {
-					$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha unsuccessful!!');
-				}
+				} 
+				// else {
+				// 	$this->session->set_flashdata('gcaptcha_error', 'Sorry Google Recaptcha unsuccessful!!');
+				// }
 			}
 			$data['user'] = $userData;
 			$data['region'] = $this->Addressmodel->select_region();

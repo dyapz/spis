@@ -20,8 +20,8 @@
 </div>
     <h5 class="card-title mb-4">We're reviewing your account. </h5>
     <p class="card-text">For security purposes, your account is pending and under review by our staff before activation. <br>
-        This usually takes less than an hour. We'll update you soon!,  For more information, please call _________ or email _________. </p>
-        <a href="<?php echo base_url().'auth/logout';?>" class="btn btn-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    This usually takes less than an hour. We'll update you soon! For more information, please email us at _________. </p>
+    <a href="<?php echo base_url().'auth/logout';?>" class="btn btn-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
   </div>
 </div>
 

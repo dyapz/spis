@@ -21,10 +21,33 @@ class Addressmodel extends CI_Model
         $this->db->where('region_id', $region_id);
         $this->db->order_by('province_id', 'ASC');
         $query = $this->db->get('lib_province');
-        $output = '<option value="" disabled selected>Select Province</option>';
+        $output = '<option value="" disabled selected></option>';
         foreach($query->result() as $row) {
           $output .= '<option value="'.$row->province_id.'">'.$row->province_name.'</option>';
         }
         return $output;
+    }
+
+
+    public function select_municipality($province_id) {
+      $this->db->where('province_id', $province_id);
+      $this->db->order_by('city_id', 'ASC');
+      $query = $this->db->get('lib_municipality');
+      $output = '<option value="" disabled selected></option>';
+      foreach($query->result() as $row) {
+        $output .= '<option value="'.$row->city_id.'">'.$row->city_name.'</option>';
       }
+      return $output;
+    }
+
+    public function select_barangay($city_id) {
+      $this->db->where('city_id', $city_id);
+      $this->db->order_by('brgy_id', 'ASC');
+      $query = $this->db->get('lib_barangay');
+      $output = '<option value="" disabled selected></option>';
+      foreach($query->result() as $row) {
+        $output .= '<option value="'.$row->brgy_id.'">'.$row->brgy_name.'</option>';
+      }
+      return $output;
+    }
 }

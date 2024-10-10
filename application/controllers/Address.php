@@ -21,6 +21,8 @@ class Address extends CI_Controller {
 
 	//  PROVINCE
 	public function province() {
+		$this->output->set_header('X-CSRF-TOKEN: ' . $this->security->get_csrf_hash());
+
 		if ($this->input->post('region_id')) {
 			echo $this->Addressmodel->select_province($this->input->post('region_id'));
 		} 
@@ -28,6 +30,7 @@ class Address extends CI_Controller {
 
 	//  MUNICIPALITY
 	public function municipality(){
+		$this->output->set_header('X-CSRF-TOKEN: ' . $this->security->get_csrf_hash());
 		if($this->input->post('province_id')){
 			echo $this->Addressmodel->select_municipality($this->input->post('province_id'));
 		}
@@ -35,6 +38,7 @@ class Address extends CI_Controller {
 
 	//  BARANGAY
 	public function barangay(){
+		$this->output->set_header('X-CSRF-TOKEN: ' . $this->security->get_csrf_hash());
 		if($this->input->post('city_id')){
 			echo $this->Addressmodel->select_barangay($this->input->post('city_id'));
 		}

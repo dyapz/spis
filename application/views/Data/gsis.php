@@ -1,134 +1,118 @@
 <?php 
 $csrf = array(
-  'name' => $this->security->get_csrf_token_name(),
-  'hash' => $this->security->get_csrf_hash()
+    'name' => $this->security->get_csrf_token_name(),
+    'hash' => $this->security->get_csrf_hash()
 );
-
-
 ?>
 
-
 <div class="container-fluid d-flex justify-content-center">
-    <div class="card card-shadow mt-4" style="width: 115rem;">
-    <div class="card-header">GSIS Data</div>
+    <div class="card card-shadow my-4" style="width: 115rem;">
+        <div class="card-header">GSIS Data</div>
         <div class="card-body">
-        <div id="bfrtip-btn" class="d-flex justify-content-end"></div>
+            <div id="bfrtip-btn" class="d-flex justify-content-end"></div>
 
-            <table class="table table-bordered table-hover table-responsive" id="spis_table" style="width: 100%;">
+            <table class="table table-bordered table-hover table-responsive spis_table" id="spis_table" style="width: 100%;">
                 <thead>
-                    <tr>
-                        <th class="text-center">Region</th>
-                        <th class="text-center">Province</th>
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Gender</th>
-
+                    <tr class="text-center align-middle">
+                        <th class="text-center">First Name</th>
+                        <th class="text-center">Middle Name</th>
+                        <th class="text-center">Last Name</th>
+                        <th class="text-center">Ext Name</th>
+                        <th class="text-center">Birthdate</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-center">Status</th>
                     </tr>
                 </thead>
             </table>
-
         </div>
     </div>
 </div>
 
-
 <script>
-    $(document).ready(function () {
+$(document).ready(function () {
+    var csrfName = '<?php echo $csrf['name']; ?>';
+    var csrfHash = '<?php echo $csrf['hash']; ?>';
 
-        // Retrieve CSRF token from PHP
-        var csrfName = '<?php echo $csrf['name']; ?>';
-        var csrfHash = '<?php echo $csrf['hash']; ?>';
+    $.ajaxSetup({
+        data: {
+            [csrfName]: csrfHash
+        },
+        beforeSend: function(xhr, settings) {
+            settings.data += "&" + csrfName + "=" + csrfHash;
+        },
+        complete: function (xhr) {
+            csrfHash = xhr.getResponseHeader('X-CSRF-TOKEN');
+        }
+    });
 
-        $('#spis_table thead tr')
-            .clone(true)
-            .addClass('datatableFilters')
-            .appendTo('#spis_table thead');
+    $('#spis_table thead tr')
+        .clone(true)
+        .addClass('datatableFilters')
+        .appendTo('#spis_table thead');
 
-        var table = $('#spis_table').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            order: [[1, 'asc']],
-            orderCellsTop: true,
-            fixedHeader: true,
-            dom: 'lBfrtip',
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    text: '<i class="fa-solid fa-copy"></i> COPY',
-                    className: 'copy-btn',
-                    title: '',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fa-solid fa-file-excel"></i> EXPORT TO EXCEL',
-                    className: 'excel-btn',
-                    title: 'Government Service Insurance System',
-                    footer: true,
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    }
-                },
-            ],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            ajax: {
-                url: "<?php echo base_url('data/gsis_data'); ?>",
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfHash  // Include CSRF token in headers
-                },
-                data: function(d) {
-                    d[csrfName] = csrfHash;  // Add CSRF token to the data
-                }
-            },
-            initComplete: function () {
-                var api = this.api();
-                // For each column
-                api
-                    .columns()
-                    .eq(0)
-                    .each(function (colIdx) {
-                        // Set the header cell to contain the input element
-                        var cell = $('.datatableFilters th').eq(
-                            $(api.column(colIdx).header()).index()
-                        );
-                        var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" class="text-center" />');
-
-                        // On every keypress in this input
-                        $('input', $('.datatableFilters th').eq($(api.column(colIdx).header()).index()))
-                            .off('keyup change')
-                            .on('change', function (e) {
-                                // Get the search value
-                                $(this).attr('title', $(this).val());
-                                var regexr = '({search})';
-
-                                // Search the column for that value
-                                api
-                                    .column(colIdx)
-                                    .search(
-                                        this.value != ''
-                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                            : '',
-                                        this.value != '',
-                                        this.value == ''
-                                    )
-                                    .draw();
-                            })
-                            .on('keyup', function (e) {
-                                e.stopPropagation();
-                                $(this).trigger('change');
-                            });
-
-                        // Add a condition for the "Action" column
-                        if (title == "") {
-                            cell.addClass('no-filter').html('');
+    var table = $('#spis_table').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        orderCellsTop: true,
+        fixedHeader: true,
+        dom: 'rtip', 
+        pageLength: 10, 
+        order: [[0, 'asc']],
+        language: {          
+                    processing: '<div class="loading-indicator"><img src="<?php echo base_url('assets/img/loading.gif'); ?>" alt="Loading" /></div>',
+        },
+        ajax: {
+            url: "<?php echo base_url('data/gsis_data'); ?>",
+            type: 'POST',
+            data: function(d) {
+                d[csrfName] = csrfHash; 
+                $('#spis_table thead .datatableFilters input').each(function(i) {
+                    d.columns[i].search.value = this.value;  
+                });
+            }
+        },
+        initComplete: function () {
+            var api = this.api();
+            api.columns().eq(0).each(function (colIdx) {
+                var cell = $('.datatableFilters th').eq($(api.column(colIdx).header()).index());
+                var title = $(cell).text();
+                if (title == "Birthdate") {
+                    $(cell).html('<input type="text" class="form-control text-center datepicker input-light-gray" placeholder="yyyy-mm-dd" autocomplete="off"/>');
+                    
+                    $('.datepicker').datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        showButtonPanel: true,
+                        dateFormat: "yy-mm-dd", 
+                        autoclose: true,
+                        yearRange: "1900:c", 
+                        beforeShow: function (input, inst) {
+                            var rect = input.getBoundingClientRect();
+                            var optimalTop = rect.bottom + window.scrollY;
+                            var optimalLeft = rect.left + window.scrollX;
+                            inst.dpDiv.css({ top: optimalTop, left: optimalLeft });
+                        },
+                        onSelect: function() {
+                            api.column(colIdx).search(this.value).draw();
                         }
                     });
-            },
-        });
-        table.buttons().container().appendTo($('#bfrtip-btn'));
+                } else {
+                    $(cell).html('<input type="text" class="form-control text-center input-light-gray" placeholder=" " autocomplete="off"/>');
+                }
+
+                $('input', $('.datatableFilters th').eq($(api.column(colIdx).header()).index()))
+                    .off('keyup change')
+                    .on('change', function (e) {
+                        api.column(colIdx).search(this.value).draw();
+                    })
+                    .on('keyup', function (e) {
+                        e.stopPropagation();
+                        $(this).trigger('change');
+                    });
+            });
+        },
+
     });
+});
 </script>

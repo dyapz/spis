@@ -38,7 +38,7 @@ class Accountmodel extends CI_Model {
 
 
 
-    // EXISTING EMAIL CHECK DURING VALIDATION 
+    // GET CURRENT PASSWORD
     function getPassword($params = array()){ 
         $this->db->select('*'); 
         $this->db->from('tbl_users'); 
@@ -117,6 +117,47 @@ class Accountmodel extends CI_Model {
         $this->db->update('tbl_users');
         return true;
     }
+
+    public function get_user_email($user_id) {
+        $this->db->where('user_id', $user_id);
+        return $this->db->get('tbl_users')->row();
+      }
+
+	// USER ACTIVATE RECEIVE EMAIL
+    public function activate_email_model($user_email){
+
+        $query1=$this->db->query("SELECT * from tbl_users where user_email = '".$user_email."' ");
+        $row=$query1->result_array();
+        if($query1->num_rows()>0){
+    
+        $mail_message='Dear '.$row[0]['user_fname'].','. "\r\n";
+        $mail_message.='<br><br>We are pleased to inform you that your account has been reviewed and successfully activated. You can now log in using your credentials and access all the features and services available.'."\r\n";
+        $mail_message.='<br><br>Should you have any questions or encounter any issues while logging in or using our platform, please feel free to reach out to our team at __________________.';
+        $mail_message.='<br><br>Thanks & Regards';
+        $mail_message.='<br><br>SocPen Team';  
+    
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://smtp.gmail.com';
+        $config['smtp_port'] = '465';
+        $config['smtp_user'] = 'idbs.spt.tm@gmail.com'; 
+        $config['smtp_pass'] = 'tqfakdwakoqvtjxb'; 
+        $config['mailtype'] = 'html'; 
+        $config['charset'] = 'iso-8859-1';
+        $config['wordwrap'] = TRUE; 
+        $config['newline'] = "\r\n"; 
+
+        $this->load->library('email', $config);
+        $this->email->initialize($config);                        
+        $this->email->from('idbs.spt.tm@gmail.com', 'NOREPLY');
+        $this->email->to($user_email);
+        $this->email->subject('SPIS ACTIVATION OF ACCOUNT');
+        $this->email->message($mail_message);
+
+        if ($this->email->send()) {
+        } 
+
+    }
+}
 
 
 	// USER DELETE

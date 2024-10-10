@@ -115,7 +115,7 @@
 				<input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
         <input type="submit" name="registerSubmit" value="Register" class="btn btn-custom w-100">
       </form>
-      <p class="mt-2">Already have an account?<a id="login-link" href="#" data-url-login="<?php echo base_url().'auth'; ?>">Login</a></p>
+      <p class="mt-2">Already have an account?<a id="login-link" href="#" data-url-login="<?php echo base_url().'auth'; ?>"> Login</a></p>
     </div>
     <div class="card-body-right">
       <img src="<?php echo base_url().'assets/img/socpen-logo2.png'; ?>" alt="SOCIAL PENSION INFORMATION SYSTEM" >
@@ -133,20 +133,33 @@
 
 <script>
 $(document).ready(function() {
-  // Handle region_id change
+  var csrfName = '<?php echo $csrf['name']; ?>';
+    var csrfHash = '<?php echo $csrf['hash']; ?>';
+
+    $.ajaxSetup({
+        data: {
+            [csrfName]: csrfHash
+        },
+        beforeSend: function(xhr, settings) {
+            settings.data += "&" + csrfName + "=" + csrfHash;
+        },
+        complete: function (xhr) {
+            csrfHash = xhr.getResponseHeader('X-CSRF-TOKEN');
+        }
+    });
+
   $('#region_id').on('change', function() {
     var region_id = $(this).val();
     if (region_id !== '') {
       $.ajax({
         url: "<?php echo base_url(); ?>address/province",
         method: "POST",
-        data: { 
+        data: {
           region_id: region_id,
-          '<?php echo $csrf['name']; ?>': '<?php echo $csrf['hash']; ?>' 
+          [csrfName]: csrfHash
         },
         success: function(data) {
           $('#province_id').html(data);
-          // Check if the province_id has a value and apply has-value class
           if ($('#province_id').val() !== '') {
             $('#province_id').addClass('has-value');
           } else {
@@ -164,12 +177,8 @@ $(document).ready(function() {
     }
   });
 
-  // Check if province_id has a value on page load
   if ($('#province_id').val() !== '') {
     $('#province_id').addClass('has-value');
   }
 });
-
-
-
 </script>

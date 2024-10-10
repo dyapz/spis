@@ -52,7 +52,11 @@ class Supervisor extends CI_Controller {
 
 		} else {
 			$this->load->view('template/header');
-			$this->load->view('template/nav');
+			if($this->session->userdata('user_type') == 1){ 
+				$this->load->view('template/admin-nav');
+			}else{
+				$this->load->view('template/nav');
+			}
 			$this->load->view('supervisor/index');
 			$this->load->view('template/footer');
 		}
