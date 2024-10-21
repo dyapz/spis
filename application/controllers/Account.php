@@ -81,18 +81,115 @@ class Account extends CI_Controller {
 				$dataxss = $this->security->xss_clean($userData);
 		
 				if ($this->form_validation->run() == true) {
-					$insert = $this->Accountmodel->update_profile_model($dataxss);
-					if ($insert) {
+					if ($this->Accountmodel->update_profile_model($dataxss)) {
 						$getip = json_decode(file_get_contents("http://ipinfo.io/"));
 						$ip_address = $getip->ip;
-		
+
+
 						// Audit trails
-						$this->profile_log_audit_trail($userData['user_id'], 'user_fname', $this->input->post('old_user_fname'), $userData['user_fname'], $ip_address);
-						$this->profile_log_audit_trail($userData['user_id'], 'user_mname', $this->input->post('old_user_mname'), $userData['user_mname'], $ip_address);
-						$this->profile_log_audit_trail($userData['user_id'], 'user_lname', $this->input->post('old_user_lname'), $userData['user_lname'], $ip_address);
-						$this->profile_log_audit_trail($userData['user_id'], 'user_ename', $this->input->post('old_user_ename'), $userData['user_ename'], $ip_address);
-						$this->profile_log_audit_trail($userData['user_id'], 'user_gender', $this->input->post('old_user_gender'), $userData['user_gender'], $ip_address);
-						$this->profile_log_audit_trail($userData['user_id'], 'user_designation', $this->input->post('old_user_designation'), $userData['user_designation'], $ip_address);
+						if($this->input->post('old_user_fname') != $this->input->post('user_fname')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_fname',
+								'old_value' => $this->input->post('old_user_fname'),
+								'new_value' => $this->input->post('user_fname'),
+								'ip_address' => $ip_address
+							);
+
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+
+						if($this->input->post('old_user_mname') != $this->input->post('user_mname')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_mname',
+								'old_value' => $this->input->post('old_user_mname'),
+								'new_value' => $this->input->post('user_mname'),
+								'ip_address' => $ip_address
+							);
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+
+						if($this->input->post('old_user_lname') != $this->input->post('user_lname')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_lname',
+								'old_value' => $this->input->post('old_user_lname'),
+								'new_value' => $this->input->post('user_lname'),
+								'ip_address' => $ip_address
+							);
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+
+						if($this->input->post('old_user_ename') != $this->input->post('user_ename')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_ename',
+								'old_value' => $this->input->post('old_user_ename'),
+								'new_value' => $this->input->post('user_ename'),
+								'ip_address' => $ip_address
+							);
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+
+						if($this->input->post('old_user_gender') != $this->input->post('user_gender')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_gender',
+								'old_value' => $this->input->post('old_user_gender'),
+								'new_value' => $this->input->post('user_gender'),
+								'ip_address' => $ip_address
+							);
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+
+						if($this->input->post('old_user_designation') != $this->input->post('user_designation')){
+
+							$data = array(
+								'user_id' => $this->input->post('user_id'),
+								'action' => 'Update Profile',
+								'controller' => 'account/profile',
+								'key_value' => 'U',
+								'field' => 'user_designation',
+								'old_value' => $this->input->post('old_user_designation'),
+								'new_value' => $this->input->post('user_designation'),
+								'ip_address' => $ip_address
+							);
+
+							$dataauditxss = $this->security->xss_clean($data);
+							$this->Auditmodel->insert_audit($dataauditxss);
+						}
+		
 		
 						$this->session->set_flashdata('success', 'Profile was updated successfully!');
 					} else {
@@ -120,25 +217,6 @@ class Account extends CI_Controller {
 	}
 	
 
-	// PROFILE AUDIT TRAIL
-	private function profile_log_audit_trail($user_id, $field, $old_value, $new_value, $ip_address) {
-		if ($old_value != $new_value) {
-			$data = array(
-				'user_id' => strip_tags($user_id),
-				'action' => 'Update Profile',
-				'controller' => 'account/profile',
-				'key_value' => 'U',
-				'field' => $field,
-				'old_value' => strip_tags($old_value),
-				'new_value' => strip_tags($new_value),
-				'ip_address' => $ip_address
-			);
-	
-			$dataauditxss = $this->security->xss_clean($data);
-			$this->Auditmodel->insert_audit($dataauditxss);
-		}
-	}
-	
 
 	// TEXT ONLY VALIDATION
 	public function text_only($str) {

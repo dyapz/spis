@@ -26,7 +26,7 @@
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus fa-sm"></i> New</a>
         </li> -->
         <li class="nav-item">
-          <a class="nav-link <?php if($this->uri->uri_string() == 'client/list' || (strpos($this->uri->uri_string(), 'client/information/') !== false)) { echo 'active'; }?>" href="<?php echo base_url().'client/list';?>"><i class="fa-solid fa-person-cane fa-sm"></i> Client List</a></a>
+          <a class="nav-link <?php if($this->uri->uri_string() == 'admin/client/list' || (strpos($this->uri->uri_string(), 'admin/client/information/') !== false)) { echo 'active'; }?>" href="<?php echo base_url().'admin/client/list';?>"><i class="fa-solid fa-person-cane fa-sm"></i> Client List</a></a>
         </li>
         <li class="nav-item">
           <a class="nav-link <?php if($this->uri->uri_string() == 'payroll') { echo 'active'; }?>" href="<?php echo base_url().'payroll';?>"><i class="fa-solid fa-receipt fa-sm"></i> Payroll</a></a>

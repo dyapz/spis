@@ -28,8 +28,9 @@ class Auth extends CI_Controller {
 		 $this->user_type_redirects = [
 			 '1' => 'admin',
 			 '2' => 'supervisor',
-			 '3' => 'finance',
-			 '4' => 'encoder'
+			 '3' => 'validator',
+			 '4' => 'finance',
+			 '5' => 'encoder'
 			];
  
 		 $this->user_type = $this->session->userdata('user_type');
@@ -40,7 +41,7 @@ class Auth extends CI_Controller {
 		if(!$this->user_type){
 			$this->load->view('login');
 		}elseif (isset($this->user_type_redirects[$this->user_type])) {
-			redirect($this->user_type_redirects[$this->user_type]);
+			redirect($this->user_type_redirects[$this->user_type].'/dashboard');
 
 		}
 	}
@@ -73,16 +74,20 @@ class Auth extends CI_Controller {
 		// if($validate->num_rows() > 0 && $status['success']){
 			$data  = $validate->row_array();
 			$user_id = $data['user_id'];
+			$region_id = $data['region_id'];
 			$user_fname = $data['user_fname'];
 			$user_mname = $data['user_mname'];
 			$user_lname = $data['user_lname'];
+			$user_designation = $data['user_designation'];
 			$user_active = $data['user_active'];
 			$user_type = $data['user_type'];
 			$sesdata = array(
 				'user_id' => $user_id,
+				'region_id' => $region_id,
 				'user_fname' => $user_fname,
 				'user_mname' => $user_mname,
 				'user_lname' => $user_lname,
+				'user_designation' => $user_designation,
 				'user_active' => $user_active,
 				'user_type' => $user_type,
 				'logged_in' => TRUE
@@ -110,13 +115,14 @@ class Auth extends CI_Controller {
 			$user_redirects = [
 				'1' => 'admin',
 				'2' => 'supervisor',
-				'3' => 'finance',
-				'4' => 'encoder',
+				'3' => 'validator',
+				'4' => 'finance',
+				'5' => 'encoder'
 			];
 			
 			if (isset($user_redirects[$user_type])) {
 				$this->session->set_flashdata('success', 'Welcome back '.$this->session->user_fname.'!');
-				redirect($user_redirects[$user_type]);
+				redirect($user_redirects[$user_type].'/dashboard');
 			}
 			
 		}
